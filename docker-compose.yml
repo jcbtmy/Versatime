@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+
+    server: 
+        image: jcbtmy/versatime:latest
+        ports: 
+            - "80:80"
+        container_name: versatime
+        depends_on:
+            - mongo
+
+    mongo:
+        image: mongo:latest
+        ports:
+            - "27017:27017"
+        container_name: mongo
+        volumes: 
+            - mongodb:/data/db
+volumes:
+    mongodb:
