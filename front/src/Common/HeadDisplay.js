@@ -53,16 +53,14 @@ class Head extends React.Component{
     {
         super(props);
         this.state = {
-            edit: false,
             color: "inherit",
         };
     }
 
     changeEdit = () => {
         const color = (!this.state.edit) ? "primary" : "inherit";
-        this.setState({
-                        edit: !this.state.edit, 
-                        color: color,
+        this.setState({               
+                color: color,
         });
     }
 
@@ -75,7 +73,7 @@ class Head extends React.Component{
     render(){
 
         const {classes} = this.props;
-        const {edit, color} = this.state;
+        const {color} = this.state;
         
 
         return(
