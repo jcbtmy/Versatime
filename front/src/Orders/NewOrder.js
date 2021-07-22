@@ -30,13 +30,17 @@ export function ParseOrderFile(event, products, customers, newOrders){
             data.shift(); //move head out of the data
             let order = {};
             
-            data.map( (entry) => {
+            for(let i = 0; i < data.length; i++)
+            {
+                const entry = data[i];
 
                 let obj = {};
-            
-                entry.map((col, i) => {
-                    obj[head[i]] = col; //set each column to its column name
-                });
+                
+                for(let j = 0; j < entry.length; j++){
+                    
+                    const col = entry[j];
+                    obj[head[j]] = col; //set each column to its column name
+                }
 
                 if(!obj["SO No"] || obj["SO No"] === undefined) //check if entries match the head
                 {
@@ -65,18 +69,18 @@ export function ParseOrderFile(event, products, customers, newOrders){
                     order.items = [];
 
                     //columns for customer address
-                    for(let i = 11; i < 17; i++){
+                    for(let j = 11; j < 17; j++){
                         //catch city,state column
-                        if(entry[i] === "")
+                        if(entry[j] === "")
                             continue;
-                         To += (i != 13 ) ? "" + entry[i] + "\n": entry[i] + ", " ;
+                         To += (j !== 13 ) ? "" + entry[j] + "\n": entry[j] + ", " ;
                     }
                     //column for shipping address
-                    for(let i = 17; i < 24; i++ ){
+                    for(let j = 17; j < 24; j++ ){
                         //catch city, state column
-                        if(entry[i] === "")
+                        if(entry[j] === "")
                             continue;
-                        shipTo += (i !== 20) ?  "" + entry[i] + "\n": entry[i] + ", ";
+                        shipTo += (j !== 20) ?  "" + entry[j] + "\n": entry[j] + ", ";
                     }
                       
                     
@@ -84,15 +88,18 @@ export function ParseOrderFile(event, products, customers, newOrders){
                     order.to = To;
                 }
 
-                const product  = products.find((product) =>  obj["Item ID"].startsWith(product.productId)); //find the product
+                const product = products.find((product) =>  obj["Item ID"].startsWith(product.productId)); //find the product
 
                 if(product){
 
                     if(product.productPackage.length) //handle package items with tablets, modules, and mounts
                     {
-                       product.productPackage.map((productId) => {
+                       
+                        for(let j = 0 ; j < product.productPackage.length; j++){
 
-                           const isDuplicate = order.items.find((item) => (item.productId === productId)); //find duplicate
+                            const productId = product.productPackage[j];
+
+                            const isDuplicate = order.items.find((item) => (item.productId === productId)); //find duplicate
  
                             if(isDuplicate){ //if duplicate add to quantity
                                 isDuplicate.quantity += parseInt(obj["Qty Ordered"]); 
@@ -104,7 +111,7 @@ export function ParseOrderFile(event, products, customers, newOrders){
                                                     serials: [],
                                 });
                             }
-                       });
+                        }
                     }
                     else{ 
 
@@ -124,6 +131,6 @@ export function ParseOrderFile(event, products, customers, newOrders){
                 }
                 
 
-            });
+            }
 
 }
