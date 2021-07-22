@@ -1,5 +1,5 @@
 
-import React, { lazy } from "react";
+import React from "react";
 import {SearchBar} from "../Common/Search";
 import {Display, DisplayItem} from "../Common/Display";
 import {Recent, RecentItem} from "../Common/Recent";
