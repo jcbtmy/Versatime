@@ -216,10 +216,12 @@ export default class Orders extends React.Component {
 
         if(items !== undefined && items.length){
 
-            items.map(
-                (item, i) => {
+            
+              for(let i = 0; i < items.length ; i++)
+              {
+                    const item = items[i];
 
-                    const productName = this.props.products.find((product) => product.productId === item.productId).productName;
+                    const productName = products.find((product) => product.productId === item.productId).productName;
 
                     const columns = [productName, item.productId, <b>{item.quantity}</b>]; 
 
@@ -239,8 +241,7 @@ export default class Orders extends React.Component {
                         rows.push(<Row key={i} items={columns}/>);
                     }
                     
-                }
-            );
+              }
         }
 
           this.setState({rows: rows});
