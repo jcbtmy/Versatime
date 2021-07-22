@@ -3,7 +3,7 @@ import React from 'react';
 import {NoteField} from "../Common/Fields"
 import {Row, RepairTable} from "../Common/TemplateTable";
 import {RmaTestBox} from "../Common/Buttons";
-import { Button, Typography } from '@material-ui/core';
+import { Button} from '@material-ui/core';
 import { Title } from '../Text';
 
 export default class RMARepair extends React.Component{
@@ -45,7 +45,7 @@ export default class RMARepair extends React.Component{
     }
 
     componentDidUpdate(prevProps){
-        if(prevProps != this.props){
+        if(prevProps !== this.props){
             this.setState({tests: this.props.tests});
         }
     }
@@ -78,7 +78,7 @@ export default class RMARepair extends React.Component{
 
         for(let i = 0; i < this.state.tests.length; i++) //check if all test passed, else test failed
         {
-            if(this.state.tests[i].passed == false ) //if failed test update the serial with note and failed test
+            if(this.state.tests[i].passed === false ) //if failed test update the serial with note and failed test
             {
                 testingResults.passed = false;
                 testingResults.note = this.state.tests[i].notes;

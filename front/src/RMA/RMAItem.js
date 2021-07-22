@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Paper  from "@material-ui/core/Paper"
-import {NoteField, ProductField, SerialField} from "../Common/Fields";
+import { ProductField, SerialField} from "../Common/Fields";
 import {NewButton} from "../Common/Buttons";
 import {makeStyles} from "@material-ui/core";
 
@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-class _RMAItem extends React.Component {
+class RmaItem extends React.Component {
 
     constructor(props)
     {
@@ -124,5 +124,5 @@ class _RMAItem extends React.Component {
 export default function RMAItem(props)
 {
     const classes = useStyles();
-    return <_RMAItem classes={classes} {...props}/>
+    return <RmaItem classes={classes} {...props}/>
 }
