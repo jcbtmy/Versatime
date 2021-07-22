@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {CollapseRow} from '../Common/TemplateTable';
 import {OrderItemSerial} from "./OrderItemSerial";
-import Typography from "@material-ui/core/Typography";
+
 import DoneIcon from "@material-ui/icons/Done";
 
 
@@ -17,16 +17,19 @@ export class OrderTestRow extends React.Component{
     }
 
     updateCounter = () => {
+        
         let counter = 0;
 
-        this.props.serials.map(
-                (serial) => {
-                    if(this.props.serialTests[serial])
-                    {
-                        counter += 1;
-                    }
-                }
-        );
+        for(let i = 0; i < this.props.serials.length; i++)
+        {
+            const serial = this.props.serials[i];
+
+            if(this.props.serialTests[serial])
+            {
+                counter += 1;
+            }
+
+        }
 
         this.setState({counter: counter});
     }
@@ -37,7 +40,7 @@ export class OrderTestRow extends React.Component{
 
     componentDidUpdate(prevProps){
 
-        if(prevProps != this.props)
+        if(prevProps !== this.props)
         {
             this.updateCounter();
         }
