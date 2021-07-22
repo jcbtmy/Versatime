@@ -9,8 +9,8 @@ import Box from "@material-ui/core/Box";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { useState } from "react";
 import { makeStyles } from "@material-ui/core";
-import { Title, Text } from "./Text";
-import {Link, NavLink } from "react-router-dom";
+import { Title} from "./Text";
+import {Link} from "react-router-dom";
 import logo from "./Logo-Alone.ico";
 import Paper from "@material-ui/core/Paper";
 import Slide from '@material-ui/core/Slide';
@@ -141,7 +141,7 @@ export const MenuBar = (props) => {
 
     const mapRoutes = (route, i ) => {
 
-        const focusRoute = (i == page) ? classes.currentRoute : "";
+        const focusRoute = (i === page) ? classes.currentRoute : "";
         return(
             <div    key={i} 
                     onClick={(e) => update(i)} 
