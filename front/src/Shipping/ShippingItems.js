@@ -1,7 +1,6 @@
 import React from "react";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
-import {NewButton} from "../Common/Buttons";
 
 import { useDrag, useDrop} from 'react-dnd'
 
@@ -14,7 +13,7 @@ const ItemTypes = {
 
 export function ItemDropTable(props){
 
-    const [{ isOver, canDrop }, drop] = useDrop(
+    const  drop = useDrop(
 
         () => ({
           accept: ItemTypes.PRODUCT,
@@ -23,7 +22,7 @@ export function ItemDropTable(props){
             isOver: !!monitor.isOver(),
           })
         }),
-    );
+    )[1];
     
     return(
         <Box ref={drop}>
@@ -35,13 +34,13 @@ export function ItemDropTable(props){
 
 function DragItem(props) {
 
-    const [{isDragging}, drag] = useDrag({
+    const  drag = useDrag({
         type: ItemTypes.PRODUCT,
         item: props.item,
         collect: monitor => ({
           isDragging: !!monitor.isDragging(),
         }),
-    });
+    })[1];
 
     return (
         <React.Fragment>
@@ -103,7 +102,6 @@ export default class ShippingItems extends React.Component{
     render() 
     {
         const {products,availableItems} = this.props;
-        const {serial,product, quantity} = this.state;
 
         return(
             <Box mt={1}>
@@ -120,6 +118,7 @@ export default class ShippingItems extends React.Component{
                                                 />
                                         );
                                     }
+                                    return null;
                                 })
                             }
                     </Box>

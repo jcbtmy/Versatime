@@ -1,4 +1,4 @@
-import {useState} from 'react';
+
 import { makeStyles} from "@material-ui/core";
 
 
@@ -155,7 +155,7 @@ export default function ShippingPrintSheet(props){
                     <div>Versacall.com</div>
                 </div>
                 <div className={classes.vLogo}>
-                    <img src="/VersaCallImage.png"></img>
+                    <img src="/VersaCallImage.png" alt="VersaCall">VersaCall</img>
                 </div>
                 <div className={classes.packingSlipNumber}>
                     <div>

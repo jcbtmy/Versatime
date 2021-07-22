@@ -101,7 +101,7 @@ export default class ShippingDisplay extends React.Component{
 
         };
 
-        let pdf = null;
+        this.pdf = null;
     }
 
     componentDidMount(){
@@ -364,7 +364,8 @@ export default class ShippingDisplay extends React.Component{
         const avaiableItems = [];
 
         if(order){
-            order.items.map((item) => { //get order items
+            order.items.array.forEach(
+            (item) => { //get order items
                 avaiableItems.push({
                     productId: item.productId,
                     quantity: item.quantity,
@@ -373,7 +374,7 @@ export default class ShippingDisplay extends React.Component{
         }
 
         if(rma && rma.items){ //get rma items
-            rma.items.map((item) => {
+            rma.items.forEach((item) => {
                 for(let i = 0; i < avaiableItems.length; i++)
                 {
                     if(avaiableItems[i].productId === item.productId)
@@ -392,10 +393,10 @@ export default class ShippingDisplay extends React.Component{
         }
 
         if(packingSlips){
-            packingSlips.map((packingSlip) => {
+            packingSlips.forEach((packingSlip) => {
 
                 if(packingSlip.items){ //check items in packing slip
-                    packingSlip.items.map((item) => {
+                    packingSlip.items.forEach((item) => {
                         for(let i = 0; i < avaiableItems.length; i++)
                         {
                             if(avaiableItems[i].productId === item.productId && avaiableItems[i].quantity - item.quantity >= 0)
@@ -408,7 +409,7 @@ export default class ShippingDisplay extends React.Component{
                 }
 
                 if(packingSlip.returnedItems){ //check return items in packing slip(for rmas etc)
-                    packingSlip.returnedItems.map((item) => {
+                    packingSlip.returnedItems.forEach((item) => {
                         for(let i = 0; i < avaiableItems.length; i++)
                         {
                             if(avaiableItems[i].productId === item.productId && avaiableItems[i].quantity - item.quantity >= 0)
@@ -491,7 +492,6 @@ export default class ShippingDisplay extends React.Component{
         this.setState((prevState) => {
 
             const packingSlips = prevState.packingSlips;
-            const tab = prevState.tab;
 
             const length = prevState.packingSlips.length;
 
@@ -729,7 +729,7 @@ export default class ShippingDisplay extends React.Component{
 
     render()
     {
-        const {products, customers ,serials, orders, rmas} = this.props;
+        const {products, orders, rmas} = this.props;
         const { 
                 newShipment,
                 packingSlips,
@@ -877,6 +877,9 @@ export default class ShippingDisplay extends React.Component{
                                                                 </GenTableRow>
                                                         );
                                                     }
+                                                   
+                                                    return null;
+                        
                                                 })
                                             }
                                         </GenTableBody>
@@ -913,6 +916,7 @@ export default class ShippingDisplay extends React.Component{
                                                                 </GenTableRow>
                                                         );
                                                     }
+                                                    return null;
                                                 })
                                             }
                                         </GenTableBody>
