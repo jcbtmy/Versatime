@@ -5,7 +5,6 @@ import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
 
 import {Recent, RecentItem} from "../Common/Recent";
-import { Message } from "../Common/Message";
 import { Display, DisplayItem } from "../Common/Display";
 
 
