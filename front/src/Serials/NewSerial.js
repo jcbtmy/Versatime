@@ -6,11 +6,9 @@ import { Title } from '../Text';
 import {Message} from "../Common/Message"
 import {    ProductField, 
             CustomerField, 
-            NumberField, 
             QuantityField,
             RMAField,
             OrderField,
-            MultipleSerials,
         } from "../Common/Fields";
 
 const useStyles = makeStyles(() => ({
@@ -31,7 +29,7 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-class New_Serial extends React.Component{
+class Newserial extends React.Component{
 
     constructor(props){
         super(props);
@@ -95,11 +93,12 @@ class New_Serial extends React.Component{
                 .then((serials) => { 
                     this.setState({updated: true});
 
-                    serials.map((serial) => {
+                    for(let i = 0; i < serials.length; i++)
+                    {
+                        const serial = serials[i];
                         serial.customer = customer;
                         this.props.updateRoot(serial);
-                    });
-                    
+                    }
                 })
                 .catch((error) => this.setState({updated : {error: error.toString()}}));
         }
@@ -143,5 +142,5 @@ class New_Serial extends React.Component{
 export default function NewSerial(props){
     const classes = useStyles();
 
-    return <New_Serial classes={classes} {...props} />
+    return <Newserial classes={classes} {...props} />
 }

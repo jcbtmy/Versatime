@@ -225,7 +225,6 @@ export const serialBluetoothMeshXML = (mesh, bluetooth) => {
 export function getDymoPrinter(dymo)
 {
     const printers = dymo.label.framework.getPrinters();
-    let printerName;
 
     if(printers.length === 0)
     {
@@ -235,9 +234,9 @@ export function getDymoPrinter(dymo)
     for (let i = 0; i < printers.length; ++i)
     {
         let printer = printers[i];
-        if (printer.printerType == "LabelWriterPrinter")
+        if (printer.printerType === "LabelWriterPrinter")
         {
-            return printerName = printer.name;
+            return printer.name;
             
         }
     }

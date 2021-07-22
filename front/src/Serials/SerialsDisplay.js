@@ -46,7 +46,6 @@ export default class SerialDisplay extends React.Component{
             recentSerials: null,
             message:null,
             change: false,
-            err: null,
         };
     }
 
@@ -338,8 +337,7 @@ export default class SerialDisplay extends React.Component{
     }
 
     render(){
-        const { serial,  
-                err, 
+        const { serial,   
                 newSerial, 
                 recentSerials, 
                 message,
