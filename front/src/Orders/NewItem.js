@@ -3,7 +3,6 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import AddIcon from '@material-ui/icons/Add';
 import IconButton from '@material-ui/core/IconButton';
-import Button from "@material-ui/core/Button";
 import {makeStyles} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper"
 
@@ -30,7 +29,6 @@ class Item extends React.Component{
         this.state =  {
             product: {productName: ""},
             quantity: 0,
-            buttonClicked: false,
         };
     }
 
@@ -52,12 +50,8 @@ class Item extends React.Component{
         
     }
 
-    onClick = (event) => {
-        this.setState({buttonClicked: true});
-    }
-
     render(){
-        const {product,quantity, buttonClicked} = this.state;
+        const {product,quantity} = this.state;
         const {classes, products, key} = this.props;
 
         return(
