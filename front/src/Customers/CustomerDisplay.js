@@ -91,13 +91,13 @@ export default class CustomerDisplay extends React.Component{
     render()
     {
         const {customers} = this.props;
-        const {customer, customerOrders, customerRmas, customerSerials, newCustomer, message} = this.state;
+        const {customer, customerOrders, newCustomer, message} = this.state;
 
         return(
             <Display>
 
                     <SearchBar  label="Customers"
-                                options={this.props.customers}
+                                options={customers}
                                 getOptionLabel={this.getOptionLabel}
                                 newOrderFunction={this.newCustomer}
                                 onChange={this.setCustomer}    
