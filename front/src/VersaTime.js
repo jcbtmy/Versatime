@@ -179,6 +179,7 @@ export default class VersaApp extends React.Component {
   }
 
   render() {
+    
     const { menuOpen,
             customers, 
             error, 
@@ -189,7 +190,6 @@ export default class VersaApp extends React.Component {
             rmas,
 
     } = this.state;
-    const { classes } = this.props;
 
     return (
       <Router>
