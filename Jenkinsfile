@@ -15,20 +15,12 @@ pipeline{
     
     
     stages{
-/*
-        stage('Checkout')
-        {
-            steps{
-                sh "git fetch origin"
-                sh "git reset --hard origin/main"
-            }
-        }
-*/        
+       
         stage('Build'){
          
             steps{
                 
-                sh "echo '-->Building Front End<----'"
+                echo "-->Building Front End<----"
                 
                  //build compile front end src
                 dir("front"){
@@ -80,7 +72,8 @@ pipeline{
         {
             steps{
 
-                sh "-->Cleaning Images and Workspace<--"
+                echo "-->Cleaning Images and Workspace<--"
+                
                 sh "docker rmi $imagename:$BUILD_NUMBER"
                 sh "docker rmi $imagename:latest"
 
