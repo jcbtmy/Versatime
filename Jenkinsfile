@@ -15,13 +15,7 @@ pipeline{
     
     
     stages{
-         //clean workspace
-        stage('Clean') {
-            steps{    
-                sh "rm -rf *"
-            }
-        }   
-    
+/*
         stage('Checkout')
         {
             steps{
@@ -29,12 +23,12 @@ pipeline{
                 sh "git reset --hard origin/main"
             }
         }
-        
-        stage('Build Src'){
+*/        
+        stage('Build'){
          
             steps{
                 
-                sh "echo '--->Building Front End<-----'"
+                sh "echo '-->Building Front End<----'"
                 
                  //build compile front end src
                 dir("front"){
@@ -47,15 +41,9 @@ pipeline{
                 sh "rm -r back/public/*"
                 
                 sh "mv front/build/ back/public/"
-                
-            }
-        }
-        
-        
-        stage("Build Image")
-        {
-            steps{
-                
+
+
+
                 echo "-->Building Docker Image<--"
                         
                 dir("back"){
@@ -65,12 +53,12 @@ pipeline{
                         dockerImage = docker.build imagename
                             
                     }
-                }
-                    
+                }    
             }
         }
         
-        stage("Deploy Image")
+        
+        stage("Deploy")
         {
             steps{
                 
@@ -88,11 +76,15 @@ pipeline{
             }
         }
         
-        stage("Remove Image")
+        stage("Cleanup")
         {
             steps{
+
+                sh "-->Cleaning Images and Workspace<--"
                 sh "docker rmi $imagename:$BUILD_NUMBER"
                 sh "docker rmi $imagename:latest"
+
+                sh "rm -rf *"
             }
         }
     }
