@@ -57,12 +57,19 @@ pipeline{
                 echo "-->Deploying Image<--"
                     
                 script {
+
+                    sh "docker save jcbtmy/versatime:latest -o versatime.tar"
+
+
+                    /*
                         
                     docker.withRegistry( '', registryCredential ) {
                             
                         dockerImage.push("$BUILD_NUMBER")
                         dockerImage.push('latest')
                     }
+
+                    */
                     
                 }
             }
