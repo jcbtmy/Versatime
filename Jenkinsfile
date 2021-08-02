@@ -60,7 +60,7 @@ pipeline{
 
                     sh "docker save $imagename:latest -o versatime.tar"
 
-                    sh "pwd"
+                    sh "cp versatime.tar /home/jacobtoomey/Projects/javascript/versa-time/"
 
                     /*
                         
