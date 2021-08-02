@@ -80,8 +80,7 @@ pipeline{
             steps{
 
                 echo "-->Cleaning Images and Workspace<--"
-                
-                sh "docker rmi $imagename:$BUILD_NUMBER"
+            
                 sh "docker rmi $imagename:latest"
 
                 sh "rm -rf *"
