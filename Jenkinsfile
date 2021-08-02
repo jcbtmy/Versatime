@@ -58,7 +58,7 @@ pipeline{
                     
                 script {
 
-                    sh "docker save $imagename:latest -o versatime.tar"
+                    sh "docker save $imagename:latest | gzip > versatime.tar.gz"
 
                     /*
                         
