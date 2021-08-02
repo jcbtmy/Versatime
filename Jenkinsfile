@@ -60,7 +60,7 @@ pipeline{
 
                     sh "docker save $imagename:latest -o versatime.tar"
 
-                    sh "ls"
+                    sh "pwd"
 
                     /*
                         
