@@ -60,8 +60,6 @@ pipeline{
 
                     sh "docker save $imagename:latest -o versatime.tar"
 
-                    sh "cp versatime.tar /home/jacobtoomey/Projects/javascript/versa-time/"
-
                     /*
                         
                     docker.withRegistry( '', registryCredential ) {
@@ -82,9 +80,9 @@ pipeline{
 
                 echo "-->Cleaning Images and Workspace<--"
             
-                //sh "docker rmi $imagename:latest"
+                sh "docker rmi $imagename:latest"
 
-                sh "rm -rf *"
+                //sh "rm -rf *"
             }
         }
     }
