@@ -58,8 +58,9 @@ pipeline{
                     
                 script {
 
-                    sh "docker save jcbtmy/versatime:latest -o versatime.tar"
+                    sh "docker save $imagename:latest -o versatime.tar"
 
+                    sh "ls"
 
                     /*
                         
