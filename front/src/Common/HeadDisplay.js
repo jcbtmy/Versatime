@@ -60,14 +60,14 @@ class Head extends React.Component{
 
     componentDidMount()
     {
-        this.setState({edit: this.props.edit});
+        this.setState({edit: false});
     }
 
     componentDidUpdate(prevProps)
     {
         if(this.props !== prevProps)
         {
-            this.setState({edit: this.props.edit});
+            this.setState({edit: false});
         }
     }
 
