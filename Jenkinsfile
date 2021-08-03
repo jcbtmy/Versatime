@@ -66,7 +66,6 @@ pipeline{
 
 
                     sh '''
-                        [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
                         ssh -tt versacall@192.168.100.67 " 
                             ls -al
                         "
