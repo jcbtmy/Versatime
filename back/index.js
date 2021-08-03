@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const InitiateMongodb = require("./config/db.js");
-const dotenv = require("dotenv")
+const dotenv = require("dotenv");
 
 
 const auth = require("./middleware/Auth");
@@ -21,13 +21,15 @@ const serials = require("./routes/serials");
 const rmas = require("./routes/rmas");
 const packingSlips = require("./routes/packingSlips");
 
-dotenv.config();
+dotenv.config({path: __dirname + '/.env'});
 
 const port = process.env.PORT || 80;
 
-const static_path = "./public/build/"; 
+const static_path = ( process.env.DEV === '1') ?  "../front/public/build/" : "./public/build/";
 
-InitiateMongodb();
+const db_host = (process.env.DEV === '1') ? "localhost" : "mongo";
+
+InitiateMongodb(db_host);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));

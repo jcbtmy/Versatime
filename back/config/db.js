@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 
-const MONGOURI = "mongodb://mongo:27017/site";
-
 const mongodbOptions = {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
@@ -9,8 +7,10 @@ const mongodbOptions = {
 }
 
 
-const InitiateMongoServer = async () => {
+const InitiateMongoServer = async (db_host) => {
 	
+	const MONGOURI = `mongodb://${db_host}:27017/site`;
+
 	try {
 		await mongoose.connect(MONGOURI, mongodbOptions);
 		console.log("Connected To Mongodb");
