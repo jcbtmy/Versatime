@@ -66,7 +66,9 @@ pipeline{
                     sh "scp versatime.tar.gz versacall@192.168.100.67:/home/versacall/"
                     sh '''
                         ssh -tt versacall@192.168.100.67 "
-                        
+
+                            ls
+
                             gzip -d versatime.tar.gz
                             docker load --input versatime.tar.gz
                             docker-compose stop
@@ -90,7 +92,7 @@ pipeline{
             
                 sh "docker rmi $imagename:latest"
 
-                //sh "rm -rf *"
+                sh "rm -rf *"
             }
         }
     }
