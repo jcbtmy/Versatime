@@ -4,8 +4,8 @@ pipeline{
         
         imagename = "jcbtmy/versatime"
         
-        registryCredential = 'jcbtmy-dockerhub'
-        
+        keyName = "sshPrivateKey"
+
         dockerImage = ''
     }
     
@@ -59,17 +59,12 @@ pipeline{
                 script {
 
                     sh "docker save $imagename:latest | gzip > versatime.tar.gz"
+                }
 
-                    /*
-                        
-                    docker.withRegistry( '', registryCredential ) {
-                            
-                        dockerImage.push("$BUILD_NUMBER")
-                        dockerImage.push('latest')
-                    }
+                sshagent(credentials: [keyName]) {
 
-                    */
-                    
+                    sh "ssh versacall@192.168.100.67"
+                    sh "ls"
                 }
             }
         }
