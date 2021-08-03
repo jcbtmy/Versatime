@@ -54,13 +54,28 @@ class Head extends React.Component{
         super(props);
         this.state = {
             color: "inherit",
+            edit: null,
         };
+    }
+
+    componentDidMount()
+    {
+        this.setState({edit: this.props.edit});
+    }
+
+    componentDidUpdate(prevProps)
+    {
+        if(this.props !== prevProps)
+        {
+            this.setState({edit: this.props.edit});
+        }
     }
 
     changeEdit = () => {
         const color = (!this.state.edit) ? "primary" : "inherit";
         this.setState({               
                 color: color,
+                edit: !this.state.edit,
         });
     }
 
@@ -73,7 +88,7 @@ class Head extends React.Component{
     render(){
 
         const {classes} = this.props;
-        const {color} = this.state;
+        const {color, edit} = this.state;
         
 
         return(
@@ -100,7 +115,7 @@ class Head extends React.Component{
                                         }
                                         else if(this.props.edit)
                                         {
-                                            item = React.cloneElement(child, {edit: this.state.edit});
+                                            item = React.cloneElement(child, {edit: edit});
                                         }
                                         else{
                                             item = React.cloneElement(child, {edit: true});
