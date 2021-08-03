@@ -64,13 +64,14 @@ pipeline{
                 sshagent(credentials: [keyName]) {
 
                     sh "scp versatime.tar.gz versacall@192.168.100.67:/home/versacall/"
+
                     sh '''
                         ssh -tt versacall@192.168.100.67 "
 
                             ls
 
                             gzip -d versatime.tar.gz
-                            docker load --input versatime.tar.gz
+                            docker load --input versatime.tar
                             docker-compose stop
                             docker-compose rm -f
                             docker-compose pull   
