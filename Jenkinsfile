@@ -63,8 +63,11 @@ pipeline{
 
                 sshagent(credentials: [keyName]) {
 
-                    sh "ssh versacall@192.168.100.67"
-                    sh "ls"
+                    sh '''ssh -tt versacall@192.168.100.67 " 
+                        ls -al
+                    "
+                    '''
+        
                 }
             }
         }
