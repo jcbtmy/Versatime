@@ -17,5 +17,13 @@ services:
         container_name: mongo
         volumes: 
             - mongodb:/data/db
+
+    mongo-express:
+        image: mongo-express:latest
+        depends_on:
+            - mongo
+        ports:
+          - "8888:8081"
+        container_name: mongoexpress
 volumes:
     mongodb:
