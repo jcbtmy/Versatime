@@ -88,13 +88,11 @@
             async function submitForm(e, data){
 
                 e.preventDefault();
-
-                console.log(data.password.value);
                     
                 const bitArray = sjcl.hash.sha256.hash(data.password.value);
                 const password = sjcl.codec.hex.fromBits(bitArray);   
                 
-                console.log(password);
+
                 fetch("/user/login", {
 
                     method: "POST",
