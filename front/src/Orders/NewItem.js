@@ -6,6 +6,8 @@ import IconButton from '@material-ui/core/IconButton';
 import {makeStyles} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper"
 
+import { NewButton } from '../Common/Buttons';
+
 const useStyles = makeStyles(() => ({
     container: { 
         paddingBottom: 30, 
@@ -81,9 +83,7 @@ class Item extends React.Component{
                             onChange={this.setQuantity}
                         />
                         
-                        <IconButton size="small" onClick={this.updateParent} style={{alignSelf:"center"}}>
-                            <AddIcon fontSize="large" color="primary"/>
-                        </IconButton>
+                        <NewButton title="Add" onClick={this.updateParent} />                  
                     </div>
                 </Paper>
             </div>
