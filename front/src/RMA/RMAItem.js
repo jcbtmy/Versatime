@@ -85,7 +85,7 @@ class RmaItem extends React.Component {
 
             let tests = [];
 
-            if(product.productId === "53060-10"){ //is it a touchscreen?
+            if(product.productId === "83000-24" || product.productId === "83000-15" || product.productId === "83000-17"){ //is it a touchscreen?
                 this.touchScreenParts.map((part) => tests.push({passed: null, part: part, notes: ""}));
             }
             else{ //else check module
