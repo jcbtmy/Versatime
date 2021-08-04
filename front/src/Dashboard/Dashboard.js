@@ -186,7 +186,7 @@ export default class Dashboard extends React.Component{
                                                 to={{
                                                     pathname:"/SerialNumbers",
                                                     state:{
-                                                        RMANumber: item.serialNumber,
+                                                        serialNumber: item.serialNumber,
                                                     }
                                                 }}
                                             >
