@@ -153,7 +153,8 @@ export default class SerialDisplay extends React.Component{
                                             else if( entry.action === "RMA"){
                                                 entry.action = <div style={{color: "purple"}}>{entry.action}</div>
                                             }
-                                            return <Row items={[   entry.action, 
+                                            return <Row items={[   
+                                                        entry.action, 
                                                         dateString( new Date(entry.date)), 
                                                         entry.author,
                                                         entry.RMANumber,
@@ -394,7 +395,7 @@ export default class SerialDisplay extends React.Component{
                 {  serial && 
                     <DisplayItem>
                         <Typography variant="h5">Serial Details</Typography>
-                        <Box display="flex" style={{gap: 15, margin: "15px 0px 15px 0px"}}>
+                        <Box display="flex" style={{gap: 15, margin: "7px 0px 7px 0px"}}>
                             <Button color="primary" variant="contained" onClick={this.printSerialDetails}>Print Details Label</Button>
                             <Button color="primary" variant="contained" onClick={this.printSerial}>Print Serial Number</Button>
                         </Box>
