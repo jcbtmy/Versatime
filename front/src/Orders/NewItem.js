@@ -1,8 +1,7 @@
 import React from 'react';
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import AddIcon from '@material-ui/icons/Add';
-import IconButton from '@material-ui/core/IconButton';
+
 import {makeStyles} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper"
 
