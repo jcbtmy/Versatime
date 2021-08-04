@@ -156,7 +156,7 @@ export const MenuBar = (props) => {
 
     return (
         <div className={classes.transitionContainer}>
-           <Slide direction="right" in={props.isOpen}>
+           <Slide direction="right" in={props.isOpen} unmountOnExit>
                 <Paper className={classes.menuBar}>
                         {
                             props.routes.map(mapRoutes)
