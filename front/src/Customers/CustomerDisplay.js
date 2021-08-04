@@ -11,6 +11,7 @@ import TemplateTable from "../Common/TemplateTable";
 
 
 export default class CustomerDisplay extends React.Component{
+    
     constructor(props)
     {
         super(props);

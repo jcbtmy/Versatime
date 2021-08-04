@@ -326,6 +326,8 @@ export default class SerialDisplay extends React.Component{
         else{
             this.fetchSerial(value.serialNumber);
         }
+
+        this.setState({newSerial: false});
     }
 
     newSerial = () => {
