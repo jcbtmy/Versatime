@@ -57,7 +57,7 @@ export const NewButton = (props) => {
 
     return(
         <Tooltip title={props.title} placement="top">
-            <IconButton onClick={props.onClick} size="small">
+            <IconButton onClick={props.onClick} size="small" style={{alignSelf: "center"}}>
                 <AddIcon color="primary" fontSize="large"/>
             </IconButton>
         </Tooltip>

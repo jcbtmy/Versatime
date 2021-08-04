@@ -18,6 +18,8 @@ const useStyles = makeStyles(() => ({
     },
     item:{
         flexBasis: "49%",
+        justifyContent: "center",
+        display: "flex",
     }
 }));
 
@@ -79,7 +81,7 @@ class Item extends React.Component{
                             onChange={this.setQuantity}
                         />
                         
-                        <IconButton size="medium" onClick={this.updateParent}>
+                        <IconButton size="small" onClick={this.updateParent} style={{alignSelf:"center"}}>
                             <AddIcon fontSize="large" color="primary"/>
                         </IconButton>
                     </div>
