@@ -133,4 +133,6 @@ export function ParseOrderFile(event, products, customers, newOrders){
 
             }
 
+            newOrders.push(order);
+
 }
