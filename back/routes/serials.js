@@ -244,13 +244,26 @@ router.get("/:serialNumber", async(req,res) => {
                 res.status(200).send(doc);
             })
             .catch((err) => {
-                res.status(400).json({
+                res.status(404).json({
                     message: err.message,
                 })
             }); 
 
    
 });
+
+
+router.get("/customerId/:customerId", async(req, res) => {
+    await Serial.find(req.params)
+            .then((doc) => {
+                res.status(200).send(doc);
+            })
+            .catch((err) => {
+                res.status(404).json({
+                    message: err.message,
+                });
+            })
+})
 
 
 
