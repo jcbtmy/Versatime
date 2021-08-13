@@ -2,11 +2,12 @@ import React from 'react';
 import {Display} from "../Common/Display";
 import {SearchBar} from "../Common/Search";
 import HeadDisplay from "../Common/HeadDisplay";
-import { GeneralField } from '../Common/Fields';
+import { GeneralField, TrackingNumberField } from '../Common/Fields';
 import  Button from "@material-ui/core/Button";
 import {Title} from "../Text";
 import {Message} from "../Common/Message";
-import TemplateTable from "../Common/TemplateTable";
+import {GenTable, GenTableBody, GenTableHead, GenTableRow} from "../Common/TemplateTable";
+import { Typography } from '@material-ui/core';
 
 
 
@@ -38,6 +39,37 @@ export default class CustomerDisplay extends React.Component{
         }));
     }
 
+    fetchCustomerSerials = (customerId) => {
+
+        fetch("/api/serials/customerId/" + customerId)
+            .then((res) => {
+                if(res.ok)
+                {
+                    return res.json();
+                }
+
+                res.json().then((err) => this.setState({
+                    message: {
+                        error: true,
+                        text: err.message,
+                    }
+                }))
+            })
+            .then((serials) => {
+                if(serials)
+                {
+                    this.setState({customerSerials: serials});
+                }
+            })
+            .catch((err) => this.setState({
+                message : {
+                    error: true,
+                    text: err.message,
+                }
+            }));
+
+    }
+
     redirectToOrder = (orderNumber) => {
 
     }
@@ -52,6 +84,19 @@ export default class CustomerDisplay extends React.Component{
 
     setCustomer = (option, customer) => {
         this.setState({customer: customer});
+        
+        if(customer)
+        {
+            this.fetchCustomerSerials(customer._id);
+        }
+        else{
+            this.setState({
+                customer: null,
+                customerSerials: null,
+                customerOrders: null,
+                customerRmas: null,
+            });
+        }
     }
 
     newCustomer = () => {
@@ -91,8 +136,8 @@ export default class CustomerDisplay extends React.Component{
 
     render()
     {
-        const {customers} = this.props;
-        const {customer, customerOrders, newCustomer, message} = this.state;
+        const {customers, products} = this.props;
+        const {customer, customerOrders, customerSerials, customerRmas, newCustomer, message} = this.state;
 
         return(
             <Display>
@@ -120,10 +165,31 @@ export default class CustomerDisplay extends React.Component{
                         newCustomer &&  <Button style={{width: "auto"}} color="primary" onClick={this.createNewCustomer}>Submit</Button>
                     }
                     {
-                        customerOrders && !newCustomer &&
-                        <TemplateTable 
-                                tableHead={["Order Number", "Order Date", ]}
-                            />
+                        customerSerials && !newCustomer && 
+
+                            <GenTable>
+                                <GenTableHead>
+                                    <b>Serial Number</b>
+                                    <b>Product Name</b>
+                                    <b>Product Id</b>
+                                </GenTableHead>
+                                <GenTableBody>
+                                    {
+                                        customerSerials.map((serial) => {
+                                            const product = products.find((p) =>  p.productId = serial.productId );
+
+                                            return(
+                                                <GenTableRow>
+                                                    <Typography>{serial.serialNumber}</Typography>
+                                                    <Typography>{product && product.productName}</Typography>
+                                                    <Typography>{product && product.productId}</Typography>
+                                                </GenTableRow>
+                                            )
+                                        })
+                                    }
+                                </GenTableBody>
+                            </GenTable>
+
                     }
 
             </Display>

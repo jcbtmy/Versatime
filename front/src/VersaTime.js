@@ -11,7 +11,6 @@ import Dashboard  from './Dashboard/Dashboard';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
-
 import {
   BrowserRouter as Router,
   Switch,
@@ -264,6 +263,7 @@ export default class VersaApp extends React.Component {
 
                       <Route  path="/Customers"
                               render={(props) => <CustomerDisplay {...props}
+                                                                  products={products}
                                                                   customers={customers}
                                                                   onUpdate={this.updateCustomers}
                                                   />
