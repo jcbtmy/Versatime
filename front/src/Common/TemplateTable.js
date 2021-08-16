@@ -24,8 +24,8 @@ const useStyles = makeStyles({
     width: "100%",
     alignSelf: "center",
     height: "auto",
-    maxHeight: "45vh",
-    overflowY:"scroll",
+    maxHeight: "50vh",
+    overflowY:"auto",
   },
 
   repairTable: {
@@ -34,7 +34,7 @@ const useStyles = makeStyles({
     width: "100%",
     alignSelf: "left",
     height:"100%",
-    overflowY: "hidden",
+    overflowY: "auto",
     marginBottom: 15
   },
   tableHead: {
