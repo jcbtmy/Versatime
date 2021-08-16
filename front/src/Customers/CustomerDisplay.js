@@ -176,7 +176,7 @@ export default class CustomerDisplay extends React.Component{
                                 <GenTableBody>
                                     {
                                         customerSerials.map((serial) => {
-                                            const product = products.find((p) =>  p.productId = serial.productId );
+                                            const product = products.find((p) =>  p.productId === serial.productId );
 
                                             return(
                                                 <GenTableRow>
