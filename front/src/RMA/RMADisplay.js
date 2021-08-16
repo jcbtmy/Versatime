@@ -231,7 +231,7 @@ export default class RMADisplay extends React.Component{
     }
 
     change_RMADate = (event) => {
-        this.setState({RMADateA: new Date(event.target.value), change: true})
+        this.setState({RMADate: new Date(event.target.value), change: true})
     }
 
     change_RMACustomer = (event, customer) => {
