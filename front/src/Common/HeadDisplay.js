@@ -63,13 +63,6 @@ class Head extends React.Component{
         this.setState({edit: false});
     }
 
-    componentDidUpdate(prevProps)
-    {
-        if(this.props !== prevProps)
-        {
-            this.setState({edit: false});
-        }
-    }
 
     changeEdit = () => {
         const color = (!this.state.edit) ? "primary" : "inherit";
