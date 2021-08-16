@@ -2,7 +2,7 @@ import React from 'react';
 import {Display} from "../Common/Display";
 import {SearchBar} from "../Common/Search";
 import HeadDisplay from "../Common/HeadDisplay";
-import { GeneralField, TrackingNumberField } from '../Common/Fields';
+import { GeneralField } from '../Common/Fields';
 import  Button from "@material-ui/core/Button";
 import {Title} from "../Text";
 import {Message} from "../Common/Message";
@@ -137,7 +137,7 @@ export default class CustomerDisplay extends React.Component{
     render()
     {
         const {customers, products} = this.props;
-        const {customer, customerOrders, customerSerials, customerRmas, newCustomer, message} = this.state;
+        const {customer, customerSerials, newCustomer, message} = this.state;
 
         return(
             <Display>
