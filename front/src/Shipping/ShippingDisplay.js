@@ -364,7 +364,7 @@ export default class ShippingDisplay extends React.Component{
         const avaiableItems = [];
 
         if(order){
-            order.items.array.forEach(
+            order.items.forEach(
             (item) => { //get order items
                 avaiableItems.push({
                     productId: item.productId,

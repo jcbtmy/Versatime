@@ -33,8 +33,8 @@ const useStyles = makeStyles({
     flexDirection: "column",
     width: "100%",
     alignSelf: "left",
-    height:"100%",
-    overflowY: "auto",
+    height:"auto",
+    overflowY: "hidden",
     marginBottom: 15
   },
   tableHead: {
