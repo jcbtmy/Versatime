@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
         alignSelf: "flex-start",
         display: "flex",
         flexDirection: "column",
-        marginLeft: 15,
+        marginLeft: 25,
         gap: 7,
         "& div": {
             color: "#2e75b6"
