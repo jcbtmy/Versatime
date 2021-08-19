@@ -155,7 +155,7 @@ export default function ShippingPrintSheet(props){
                     <div>Versacall.com</div>
                 </div>
                 <div className={classes.vLogo}>
-                    <img src="/VersaCallImage.png" alt="VersaCall">VersaCall</img>
+                    <img src="/VersaCallImage.png" alt="VersaCall"></img>
                 </div>
                 <div className={classes.packingSlipNumber}>
                     <div>
