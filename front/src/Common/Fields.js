@@ -347,9 +347,10 @@ export const OrderField = (props) => {
             options={props.orders}
             getOptionLabel={(option) => (option.orderNumber) ? String(option.orderNumber) : ""}
             onChange={props.onChange}
-            value={(props.value) ? (props.value) : {orderNumber: null}}
+            value={(props.value) ?  (props.value) : {orderNumber: null}}
             disabled={!props.edit}
             freeSolo
+            autoSelect
             renderInput={(params) => <TextField label="Order Number"
                                                 variant={(props.edit) ? "outlined" : "standard" }
                                                 {...params}
@@ -374,6 +375,7 @@ export const RMAField = (props) => {
             value={(props.value) ? (props.value) : {RMANumber: null}}
             disabled={!props.edit}
             freeSolo
+            autoSelect
             renderInput={ (params) => <TextField label="RMA Number"
                                                 variant={(props.edit) ? "outlined" : "standard" }
                                                 {...params}
