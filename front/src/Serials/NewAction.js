@@ -54,7 +54,7 @@ class Action extends React.Component{
 
     componentDidUpdate(prevProps){
 
-        if(this.props != prevProps)
+        if(this.props !== prevProps)
         {
             this.setState({
                 action : "",
@@ -83,6 +83,7 @@ class Action extends React.Component{
         else{
             this.setState({orderNumber: order});
         }
+
     }
     buttonClick = () => {
         this.setState({buttonClicked: true});
