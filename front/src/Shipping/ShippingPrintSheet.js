@@ -187,7 +187,7 @@ export default function ShippingPrintSheet(props){
                             <b>Date Shipped</b>
                         </div>
                         <div>
-                            {`${shipDate.getMonth()}/${shipDate.getDate()}/${shipDate.getFullYear()}`}
+                            {`${shipDate.getMonth() + 1}/${shipDate.getDate()}/${shipDate.getFullYear()}`}
                         </div>
                     </div>
                     <div>
@@ -195,7 +195,7 @@ export default function ShippingPrintSheet(props){
                             <b>Date Ordered</b>
                         </div>
                         <div>
-                            {`${props.orderDate.getMonth()}/${props.orderDate.getDate()}/${props.orderDate.getFullYear()}`}
+                            {`${props.orderDate.getMonth() + 1}/${props.orderDate.getDate()}/${props.orderDate.getFullYear()}`}
                         </div>
                     </div>
                     <div>
