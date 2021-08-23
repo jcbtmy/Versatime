@@ -52,6 +52,20 @@ class Action extends React.Component{
         }
     }
 
+    componentDidUpdate(prevProps){
+
+        if(this.props != prevProps)
+        {
+            this.setState({
+                action : "",
+                note: "",
+                orderNumber: null,
+                RMANumber: null,
+                passed: null,
+            })
+        }
+    }
+
     onClick = (event, action) => {
         this.setState({action: action});
     }
@@ -61,6 +75,7 @@ class Action extends React.Component{
     }
 
     setOrder = (event, order) => {
+
 
         if(order && order.orderNumber){
             this.setState({orderNumber: order.orderNumber });
