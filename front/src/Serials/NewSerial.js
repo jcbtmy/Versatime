@@ -57,11 +57,23 @@ class Newserial extends React.Component{
     }
     
     setOrder = (event, order) => {
-        this.setState({order: order});
+
+        if(order && order.orderNumber){
+            this.setState({order: order.orderNumber});
+        }
+        else{
+            this.setState({order: order});
+        }
+
     }
 
     setRMA = (event, rma) => {
-        this.setState({rma: rma});
+        if(rma && rma.RMANumber){
+            this.setState({rma:  rma.RMANumber});
+        }
+        else{
+            this.setState({rma: rma});
+        }
     }
     createSerials = () => {
         const {quantity, product, order, rma,customer } = this.state;
@@ -71,8 +83,8 @@ class Newserial extends React.Component{
             const newSerial = { customerId: customer._id, 
                                 quantity: quantity, 
                                 productId: product.productId,
-                                RMANumber: (rma) ? rma.RMANumber : null,
-                                orderNumber: (order) ? order.orderNumber : null,
+                                RMANumber: rma,
+                                orderNumber: order,
                             };
 
             const headers = {
@@ -124,8 +136,8 @@ class Newserial extends React.Component{
                         <ProductField products={products} value={product} onChange={this.setProduct} edit/>
                     </div>
                     <div className={classes.childFlex}>
-                        <OrderField edit orders={orders} value={order} onChange={this.setOrder}/>
-                        <RMAField   edit rmas={rmas} value={rma} onChange={this.setRMA}/>
+                        <OrderField edit orders={orders} value={{orderNumber: order}} onChange={this.setOrder}/>
+                        <RMAField   edit rmas={rmas} value={{RMANumber: rma}} onChange={this.setRMA}/>
                     </div>
                     <div className={classes.childFlex}>
                         <QuantityField value={quantity} onChange={this.setQuantity}/>

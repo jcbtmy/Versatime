@@ -71,7 +71,12 @@ class Action extends React.Component{
     }
 
     setRma = (event, rma) => {
-        this.setState({RMANumber: (rma) ? rma.RMANumber : null});
+        if(rma && rma.RMANumber){
+            this.setState({RMANumber:  rma.RMANumber});
+        }
+        else {
+            this.setState({RMANumber: rma});
+        }
     }
 
     setOrder = (event, order) => {
