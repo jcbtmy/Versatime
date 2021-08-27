@@ -11,6 +11,8 @@ import {    ProductField,
             OrderField,
         } from "../Common/Fields";
 
+import {serialXML, getDymoLabel, getDymoPrinter} from "./SerialDymoXML";
+
 const useStyles = makeStyles(() => ({
     root : {
         display: "flex",
@@ -42,6 +44,32 @@ class Newserial extends React.Component{
             error: null,
             updated: null,
         };
+    }
+
+    printSerial = (serialNumber) =>{
+
+        const dymo = window.dymo;
+
+        const printerName = getDymoPrinter(dymo);
+
+        if(!printerName)
+        {
+            this.setState({updated: {error: true,
+                                    text: "No Printer Found"}});
+            return;
+        }
+
+        const label = getDymoLabel(dymo, serialXML);
+
+        if(!label)
+        {
+            this.setState({updated: {error: true,
+                                    text: "Could not create label"}});
+            return;
+        }
+
+        label.setObjectText("BARCODE", serialNumber);
+        label.print(printerName);
     }
 
     setQuantity = (event) =>{ 
@@ -110,6 +138,7 @@ class Newserial extends React.Component{
                         const serial = serials[i];
                         serial.customer = customer;
                         this.props.updateRoot(serial);
+                        this.printSerial(serial.serialNumber);
                     }
                 })
                 .catch((error) => this.setState({updated : {error: error.toString()}}));
