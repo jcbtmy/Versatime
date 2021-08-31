@@ -28,7 +28,7 @@ router.get("/:RMANumber", async(req, res) => {
                 res.status(200).send(rma);
             })
             .catch((error) => {
-                res.status(400).json({
+                res.status(404).json({
                     message: error.message,
                 });
             });
@@ -41,7 +41,7 @@ router.get("/", async(req, res) => {
 
     if(!rmas)
     {
-        return res.status(400).json({
+        return res.status(404).json({
             message: "Error getting serials",
         });
     }
@@ -56,7 +56,7 @@ router.get("/", async(req, res) => {
         }
     }
 
-    res.send(rmasFormat);
+    res.status(200).send(rmasFormat);
 
 });
 
@@ -109,7 +109,7 @@ router.get("/recent/:amount", async(req,res) => {
                 res.status(200).send(rmas);
             })
             .catch((error) => {
-                res.status(400).json({
+                res.status(404).json({
                     message: error.message,
                 });
             })

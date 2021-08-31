@@ -26,6 +26,9 @@ let item = new mongoose.Schema({
     },
     tests: {
         type: [test],
+    },
+    underWarranty: {
+        type: Boolean,
     }
 });
 
@@ -49,6 +52,14 @@ let RMASchema = new mongoose.Schema({
     },
 
     shipTo: {
+        type: String,
+    },
+
+    dateReceived: {
+        type: Date,
+    },
+
+    additionalNotes : {
         type: String,
     },
 
