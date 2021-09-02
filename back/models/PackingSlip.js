@@ -20,11 +20,13 @@ let packingSlip = new mongoose.Schema({
         type: String,
         trim: true,
     },
-    orderNumber: {
-        type: Number,
+    
+    orderNumbers: {
+        type: [Number],
     },
-    RMANumber: {
-        type: Number,
+
+    RMANumbers: {
+        type: [Number],
     },
     boxNumber: {
         type: Number,

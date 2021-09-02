@@ -14,8 +14,8 @@ const { update } = require("../models/PackingSlipCounter");
 
 
 const CreateInputCheck = [
-    check("orderNumber", "please enter a valid order number"),
-    check("RMANumber", "Please provide a valid RMA number"),
+    check("orderNumbers", "please enter a valid order number"),
+    check("RMANumbers", "Please provide a valid RMA number"),
     check("items", "Please provide valid items field" ),
     check("packingSlipNumber", "Cannot enter packing slip number").isEmpty(),
     check("boxNumber", "Please provide a valid box number"),
@@ -23,8 +23,8 @@ const CreateInputCheck = [
 ];
 
 const updateInputCheck = [
-    check("orderNumber", "Please enter a valid order number"),
-    check("RMANumber", "Please provide a valid RMANumber"),
+    check("orderNumbers", "Please enter a valid order number"),
+    check("RMANumbers", "Please provide a valid RMANumber"),
     check("packingSlipNumber", "Cannot update packing slip number").not(),
     check("boxNumber", "Please provide a valid box number"),
     check("trackingNumber", "Please provide a valid tracking number"),
@@ -69,12 +69,12 @@ router.get("/findMany/", async(req, res) => {
 
     if(orderNumber)
     {
-        query.orderNumber = orderNumber;
+        query.orderNumbers = orderNumber;
     }
 
     if(RMANumber)
     {
-        query.RMANumber = RMANumber;
+        query.RMANumbers = RMANumber;
     }
 
 
@@ -102,8 +102,8 @@ router.post("/create", auth, CreateInputCheck, async(req,res) => {
         });
     }
 
-    const { orderNumber, 
-            RMANumber, 
+    const { orderNumbers, 
+            RMANumbers, 
             trackingNumber, 
             boxNumber, 
             items, 
@@ -125,8 +125,8 @@ router.post("/create", auth, CreateInputCheck, async(req,res) => {
     packingSlipCounter = packingSlipCounter.seq;
 
     const packingSlip ={
-                        orderNumber, 
-                        RMANumber,
+                        orderNumbers, 
+                        RMANumbers,
                         packingSlipNumber: packingSlipCounter,
                         boxNumber,
                         items,

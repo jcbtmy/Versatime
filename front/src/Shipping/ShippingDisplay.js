@@ -20,7 +20,7 @@ import {
     } from "../Common/Fields";
 
 import ShippingItems, {ItemDropTable} from "./ShippingItems";
-import ShippingServiceList from "./ShippingServices";
+import ShippingServiceList, { map } from "./ShippingServices";
 
 
 import Box from "@material-ui/core/Box";
@@ -83,8 +83,8 @@ export default class ShippingDisplay extends React.Component{
         super(props);
         this.state = {
             
-            order: null,
-            rma: null,
+            orders: null,
+            rmas: null,
             newShipment: false,
             options: null,
 
@@ -130,6 +130,7 @@ export default class ShippingDisplay extends React.Component{
         const page = document.getElementById("printSheet"); //get the rendered dom element 
         page.style.display="block"; //display it
 
+
         html2canvas(page) //create a canvas
            .then((canvas) => {
                 const imgData = canvas.toDataURL('image/png'); //get image data from canvas
@@ -167,7 +168,6 @@ export default class ShippingDisplay extends React.Component{
 
         const packingSlips = this.state.packingSlips;
 
-
         //loop through all packing slips to get the ones already made and add new ones
         for(let i = 0; i < packingSlips.length; i++)
         {
@@ -179,8 +179,8 @@ export default class ShippingDisplay extends React.Component{
             const newSlip = { //setup proper format
                 trackingNumber:     packingSlips[i].trackingNumber,
                 boxNumber:          packingSlips[i].boxNumber,  
-                orderNumber:        packingSlips[i].orderNumber,
-                RMANumber:          packingSlips[i].RMANumber,
+                orderNumbers:       packingSlips[i].orderNumbers,
+                RMANumbers:         packingSlips[i].RMANumbers,
                 items:              packingSlips[i].items,
                 customerPO:         packingSlips[i].customerPO,
                 shipmentService:    packingSlips[i].shipmentService,
@@ -209,7 +209,7 @@ export default class ShippingDisplay extends React.Component{
 
                     this.setState((prevState) => {
                         //if a successful create, then update the state
-                        const pSlips = prevState.packingSlips;
+                        const pSlips = [...prevState.packingSlips];
                         pSlips[i] = slip;
 
                         return {    packingSlips: pSlips, 
@@ -258,20 +258,20 @@ export default class ShippingDisplay extends React.Component{
                 if(packingSlips.length){ 
                         //go find the order | rma to get items, shipment info etc,
 
-                        if(packingSlips[0].RMANumber) //if rma then go grab the rma for it
+                        if(packingSlips[0].RMANumbers) //if rma then go grab the rma for it
                         {
-                            this.fetchRMA(packingSlips[0].RMANumber);
+                            this.fetchRMAs(packingSlips[0].RMANumbers);
                         }
                         else{
-                            this.setState({rma: null});
+                            this.setState({rmas: null});
                         }
 
-                        if(packingSlips[0].orderNumber) //if orderr then go grab order for it
+                        if(packingSlips[0].orderNumbers) //if orderr then go grab order for it
                         {
-                            this.fetchOrder(packingSlips[0].orderNumber);
+                            this.fetchOrders(packingSlips[0].orderNumbers);
                         }
                         else{
-                            this.setState({order: null});
+                            this.setState({orders: null});
                         }
                 }
                 else{
@@ -279,14 +279,14 @@ export default class ShippingDisplay extends React.Component{
                     //if no packing slips are made for order, go grab the correct (order | rma) to get items, info etc
                     if(searchObject.type === "Order")
                     {
-                        this.fetchOrder(searchObject.id);
-                        this.setState({rma: null});
+                        this.fetchOrders([searchObject.id]);
+                        this.setState({rmas: null});
                     }
 
                     if(searchObject.type === "RMA")
                     {
-                        this.fetchRMA(searchObject.id);
-                        this.setState({order: null});
+                        this.fetchRMAs([searchObject.id]);
+                        this.setState({orders: null})
                     }
                     
                     //add new slip to the list
@@ -298,11 +298,10 @@ export default class ShippingDisplay extends React.Component{
                         items:              [],
                         returnedItems:      [],
                         boxNumber:          1,
-                        RMANumber:          (searchObject.type === "RMA") ? searchObject.id : null,
-                        orderNumber:        (searchObject.type === "Order") ? searchObject.id : null,
+                        RMANumbers:          (searchObject.type === "RMA") ? [searchObject.id] : null,
+                        orderNumbers:        (searchObject.type === "Order") ? [searchObject.id] : null,
                     });
                 }
-
 
                 this.setState({
                     packingSlips:       packingSlips, 
@@ -313,33 +312,53 @@ export default class ShippingDisplay extends React.Component{
             .catch((err) => this.setState({message: {error: true, text: err.message}}));
     }
 
-    fetchOrder = (orderNumber) => {
+    fetchOrders = (orderNumbers) => {
 
-        fetch("/api/orders/" + orderNumber )
-            .then((res) => {
-                
-                if(res.ok)
-                {
-                    return res.json();
-                }
-                
-                res.json().then((err) => this.setState({ message: {error: true,  text: err.message} }));
+        let URLSearchString = "/api/orders/many?";
 
-            })
-            .then((order) => {
+        orderNumbers.forEach((orderNum, index) => {
 
-                if(!order){return}
+            URLSearchString += `orderNumbers[${index}]=${orderNum}`;
 
-                this.setState({order: order});
-            })
-            .catch((err) => this.setState({message: {error: true, text: err.message}}));
+            if(index != (orderNumbers.length - 1))
+                URLSearchString += "&";
+        });
+
+            fetch(URLSearchString)
+                .then((res) => {
+                    
+                    if(res.ok)
+                    {
+                        return res.json();
+                    }
+                    
+                    res.json().then((err) => this.setState({ message: {error: true,  text: err.message} }));
+
+                })
+                .then((orders) => {
+
+                    if(!orders){return}
+
+                    this.setState({orders: orders});
+                })
+                .catch((err) => this.setState({message: {error: true, text: err.message}}));
 
     }
 
     
-    fetchRMA = (RMANumber) => {
+    fetchRMAs = (RMANumbers) => {
 
-        fetch("/api/rmas/" + RMANumber)
+        let URLSearchString = "/api/rmas/many?";
+
+        RMANumbers.forEach((rmaNum, index) => {
+
+            URLSearchString += `RMANumbers[${index}]=${rmaNum}`;
+
+            if(index != (RMANumbers.length - 1))
+                URLSearchString += "&";
+        });
+
+        fetch(URLSearchString)
             .then((res) => {
 
                 if(res.ok)
@@ -349,46 +368,50 @@ export default class ShippingDisplay extends React.Component{
 
                 res.json().then((err) => this.setState({message: {error: true, text: err.message} }));
             })
-            .then((rma) => {
-                if(!rma){return;}
+            .then((rmas) => {
+                if(!rmas){return;}
 
-                this.setState({rma: rma});
+                this.setState({rmas: rmas});
             })
             .catch((err) => this.setState({message: {error: true, text: err.message} }));
 
     }
 
-    getAvailableItems(rma, order, packingSlips)
+    getAvailableItems(rmas, orders, packingSlips)
     {
         //get all available items from orders, rmas, and remove all items from the packing slips
         const avaiableItems = [];
 
-        if(order){
-            order.items.forEach(
-            (item) => { //get order items
-                avaiableItems.push({
-                    productId: item.productId,
-                    quantity: item.quantity,
+        if(orders){
+            orders.forEach(order => {
+                order.items.forEach(
+                (item) => { //get order items
+                    avaiableItems.push({
+                        productId: item.productId,
+                        quantity: item.quantity,
+                    });
                 });
             });
         }
 
-        if(rma && rma.items){ //get rma items
-            rma.items.forEach((item) => {
-                for(let i = 0; i < avaiableItems.length; i++)
-                {
-                    if(avaiableItems[i].productId === item.productId)
+        if(rmas){ //get rma items
+            rmas.forEach((rma) => {
+                rma.items.forEach((item) => {
+                    for(let i = 0; i < avaiableItems.length; i++)
                     {
-                        avaiableItems[i].quantity += 1;
-                        return;
+                        if(avaiableItems[i].productId === item.productId)
+                        {
+                            avaiableItems[i].quantity += 1;
+                            return;
+                        }
                     }
-                }
 
-                avaiableItems.push({
-                    productId: item.productId,
-                    quantity: 1,
+                    avaiableItems.push({
+                        productId: item.productId,
+                        quantity: 1,
+                    });
+
                 });
-
             });
         }
 
@@ -499,8 +522,8 @@ export default class ShippingDisplay extends React.Component{
                 packingSlipNumber:  null,
                 boxNumber:          packingSlips[length - 1].boxNumber + 1, //add new packing slip
                 trackingNumber:     null,
-                orderNumber:        (prevState.order) ? prevState.order.orderNumber : null,
-                RMANumber:          (prevState.rma) ? prevState.rma.RMANumber : null,
+                orderNumbers:       packingSlips[length - 1].orderNumbers ? packingSlips[length - 1].orderNumbers : null,
+                RMANumbers:         packingSlips[length - 1].RMANumbers   ? packingSlips[length - 1].RMANumbers : null,
                 customerPO:         null,
                 shipmentService:    null,
                 items: [],
@@ -528,8 +551,8 @@ export default class ShippingDisplay extends React.Component{
 
             const updatedSlip = {
                 packingSlipNumber:  packingSlips[i].packingSlipNumber,
-                orderNumber:        packingSlips[i].orderNumber,
-                RMANumber:          packingSlips[i].RMANumber,
+                orderNumbers:       packingSlips[i].orderNumbers,
+                RMANumbers:         packingSlips[i].RMANumbers,
                 trackingNumber:     packingSlips[i].trackingNumber,
                 boxNumber:          packingSlips[i].boxNumber,
                 shipmentService:    packingSlips[i].shipmentService,
@@ -627,30 +650,38 @@ export default class ShippingDisplay extends React.Component{
         });
     }
 
-    change_RMA = (event, rma) => {
+    change_RMA = (event, rmas) => {
+
+        const RMANumbers = (rmas) ? rmas.map(rma => rma.RMANumber) : null;
+
+        console.log(rmas);
 
         this.setState((prevState) => {
 
-            const slips = prevState.packingSlips;
+            const slips = [...prevState.packingSlips];
             //change rma for all slips
         
             for(let i = 0; i < slips.length; i++)
             {
-                slips[i].RMANumber = (rma) ? rma.RMANumber: null;
+                slips[i].RMANumbers = RMANumbers;
             }
+
             return {packingSlips: slips};
         });
 
-        if(rma){ //if not rma go get it
-            this.fetchRMA(rma.RMANumber);
+        if(RMANumbers.length){ //if not rma go get it
+            this.fetchRMAs(RMANumbers);
         }
         else{
-            this.setState({rma: null});
+            this.setState({rmas: null});
         }
     }
 
-    change_Order = (event, order) => {
-        //change order for all slips
+    change_Order = (event, orders) => {
+
+        //change order for all slip
+
+        const orderNumbers = (orders) ? orders.map((order) => order.orderNumber) : null;
 
         this.setState((prevState) => {
 
@@ -658,16 +689,16 @@ export default class ShippingDisplay extends React.Component{
         
             for(let i = 0; i < slips.length; i++)
             {
-                slips[i].orderNumber = (order) ? order.orderNumber: null;
+                slips[i].orderNumbers = orderNumbers;
             }
             return {packingSlips: slips};
         });
 
-        if(order){ //if theres not an order then go get it
-            this.fetchOrder(order.orderNumber);
+        if(orderNumbers.length){ //if theres not an order then go get it
+            this.fetchOrders(orderNumbers);
         }
         else{
-            this.setState({order: null});
+            this.setState({orders: null});
         }
     }
 
@@ -711,6 +742,7 @@ export default class ShippingDisplay extends React.Component{
     }
 
     removePackingSlip = () => {
+
         if(this.state.packingSlips.length > 1)
         {
             this.setState((prevState) => {
@@ -729,17 +761,16 @@ export default class ShippingDisplay extends React.Component{
 
     render()
     {
-        const {products, orders, rmas} = this.props;
+        const {products} = this.props;
         const { 
                 newShipment,
                 packingSlips,
                 options, 
-                order, 
-                rma , 
+                orders, 
+                rmas,
                 tab,
                 message,
                 downloadSlips,
-
             } = this.state;
 
         return(
@@ -790,7 +821,7 @@ export default class ShippingDisplay extends React.Component{
                 }
                 </Box>
                 {   
-                    (order || rma) && packingSlips && 
+                    (orders || rmas) && packingSlips && 
                     <HeadDisplay 
                         edit={!newShipment}
                         updateHead={this.updateSlipDetails}
@@ -800,22 +831,24 @@ export default class ShippingDisplay extends React.Component{
                             value={(packingSlips[tab].packingSlipNumber) ? packingSlips[tab].packingSlipNumber : "TBD when submitted"}
                             label="Packing Slip Number"
                         />
-                        <OrderField 
-                            value={(order)}
-                            orders={orders}
+                        <OrderField
+                            multiple={true}
+                            value={(orders) ? orders : []}
+                            orders={this.props.orders}
                             onChange={this.change_Order}    
                         />
                         <RMAField
-                            value={(rma)}
-                            rmas={rmas}
+                            multiple={true}
+                            value={(rmas) ? rmas : []}
+                            rmas={this.props.rmas}
                             onChange={this.change_RMA}
                         />
                         <ToField
-                            value={(order) ? order.to : rma.to}
+                            value={(orders) ? orders[0].to : rmas[0].to}
                             noEdit={true}
                         />
                         <ShippingField
-                            value={(order) ? order.shipTo: rma.shipTo}
+                            value={(orders) ? orders[0].shipTo: rmas[0].shipTo}
                             noEdit={true}
                         />
                         <TrackingNumberField
@@ -838,13 +871,13 @@ export default class ShippingDisplay extends React.Component{
                 }
                 </DisplayItem>
                 {
-                    (order || rma) && packingSlips && 
+                    (orders || rmas) && packingSlips && 
                     <DndProvider backend={HTML5Backend}>
                             <Box my={3}>
                                 <Typography variant="h5"> Available Items</Typography>
                                 <ShippingItems 
                                     products={products}
-                                    availableItems={this.getAvailableItems(rma, order, packingSlips)}
+                                    availableItems={this.getAvailableItems(rmas, orders, packingSlips)}
                                 />
                             </Box>
                             <DisplayItem>
@@ -938,12 +971,12 @@ export default class ShippingDisplay extends React.Component{
                     <ShippingPrintSheet 
                         packingSlips={packingSlips}
                         slipIndex={this.state.downloadSlipIndex}
-                        shipTo={(order) ? order.shipTo : rma.shipTo}
-                        orderDate={(order) ? new Date(order.orderDate) : new Date(rma.RMADate)}
-                        to={(order) ? order.to : rma.to}
+                        shipTo={(orders) ? orders[0].shipTo : rmas[0].shipTo}
+                        orderDate={(orders) ? new Date(orders[0].orderDate) : new Date(rmas[0].RMADate)}
+                        to={(orders) ? orders[0].to : rmas[0].to}
                         products={products}
-                        order={order}
-                        rma={rma}
+                        order={orders[0]}
+                        rma={rmas[0]}
                     />
                 }
             </Display>       

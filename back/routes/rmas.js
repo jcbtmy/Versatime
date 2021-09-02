@@ -21,6 +21,28 @@ const updateTestCheck = [
     check("tests", "Please provide tests").not().isEmpty(),
 ];
 
+
+
+router.get("/many", async(req, res) => {
+
+    if(!req.query.RMANumbers)
+    {
+        return res.status(400).json({
+            message: "Bad Request",
+        });
+    }
+
+    await RMA.find({RMANumber: {
+                        $in : req.query.RMANumbers,
+                    }})
+                    .then((doc) => res.status(200).send(doc))
+                    .catch((error) => {
+                        res.status(400).json({
+                            message: error.message,
+                        });
+                    });
+});
+
 router.get("/:RMANumber", async(req, res) => {
 
     await RMA.findOne(req.params)
@@ -59,6 +81,7 @@ router.get("/", async(req, res) => {
     res.status(200).send(rmasFormat);
 
 });
+
 
 
 router.put("/updateDetails/:RMANumber" , async(req, res) => {

@@ -104,6 +104,28 @@ router.get("/recent/:amount", async(req,res) => {
 
 });
 
+
+router.get("/many", async(req, res) => {
+
+    if(!req.query.orderNumbers)
+    {
+        return res.status(400).json({
+            message: "Bad Request",
+        });
+    }
+
+    await   Order.find({orderNumber: {
+                                $in: req.query.orderNumbers,
+                        }})
+                        .then((doc) => res.status(200).send(doc))
+                        .catch((err) => {
+                            res.send(400).json({
+                                message: err.message,
+                            });
+                        });
+
+});
+
 router.get("/:orderNumber", async(req, res) => {
 
    await Order.findOne(req.params)
@@ -117,6 +139,8 @@ router.get("/:orderNumber", async(req, res) => {
             });
 
 });
+
+
 
 
 
