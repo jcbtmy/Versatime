@@ -13,7 +13,8 @@ const useStyles = makeStyles(() => ({
         "& .Mui-disabled": {
             color: "black",
         },
-        width: 275,
+        minWidth: 275,
+       
     },
     identifierRoot:{
         fontSize:  20,
@@ -274,7 +275,7 @@ export const VersionField = (props) => {
 export const NoteField = (props) => {
     const classes = useStyles();
     return(
-        <TextField  label="Notes"
+        <TextField  label={(props.label) ? props.label : "Notes"}
                     value={(props.value) ? props.value : ""}
                     variant={(props.edit) ? "outlined" : "standard" }
                     onChange={props.onChange}
@@ -344,10 +345,11 @@ export const OrderField = (props) => {
     const classes = useStyles();
     return(
         <Autocomplete id="order"
+            multiple={(props.multiple) ? true : false}
             options={props.orders}
             getOptionLabel={(option) => (option.orderNumber) ? String(option.orderNumber) : ""}
             onChange={props.onChange}
-            value={(props.value) ?  (props.value) : {orderNumber: null}}
+            value={(props.value) ? props.value : {orderNumber: null}}
             disabled={!props.edit}
             freeSolo
             autoSelect
@@ -369,10 +371,11 @@ export const RMAField = (props) => {
     const classes = useStyles();
     return(
         <Autocomplete id="rma"
+            multiple={(props.multiple) ? true : false}
             options={props.rmas}
             getOptionLabel={(option) => (option.RMANumber) ? String(option.RMANumber) : ""}
             onChange={props.onChange}
-            value={(props.value) ? (props.value) : {RMANumber: null}}
+            value={(props.value) ? props.value : {RMANumber: null}}
             disabled={!props.edit}
             freeSolo
             autoSelect
