@@ -2,6 +2,49 @@
 import { makeStyles} from "@material-ui/core";
 
 
+function getOrderString(orderNumbers)
+{
+    if(!orderNumbers || !orderNumbers.length)
+    {
+        return null;
+    }
+
+    let soString = "";
+
+    orderNumbers.forEach((order, index) => {
+
+        soString += ("SO#" + order);
+    });
+
+    return soString;
+
+}
+
+
+function getRMAString(RMANumbers)
+{
+    if(!RMANumbers || !RMANumbers.length)
+    {
+        return null;
+    }
+
+    let rmaString = "";
+
+    RMANumbers.forEach((rma, index) => {
+        rmaString += ("RMA#" + rma);
+    });
+
+    return rmaString;
+}
+
+function renderRMAandSO(orderNumbers, RMANumbers)
+{
+    if(orderNumbers && orderNumbers.length && RMANumbers && RMANumbers.length)
+        return "/";
+
+    return null;
+}
+
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -237,9 +280,9 @@ export default function ShippingPrintSheet(props){
                             <b>Order Type</b>
                         </div>
                         <div>
-                            {packingSlips[slipIdx].orderNumber ? "Sales" : null}
-                            {packingSlips[slipIdx].orderNumber && packingSlips[slipIdx].RMANumber ? "/" : null}
-                            {packingSlips[slipIdx].RMANumber ? "RMA" : null}
+                            {(packingSlips[slipIdx].orderNumbers && packingSlips[slipIdx].orderNumbers[0]) ? "Sales" : null}
+                            {packingSlips[slipIdx].orderNumbers && packingSlips[slipIdx].RMANumbers ? "/" : null}
+                            {packingSlips[slipIdx].RMANumbers && packingSlips[slipIdx].RMANumbers[0] ? "RMA" : null}
                         </div>
                     </div>
                     <div>
@@ -247,9 +290,9 @@ export default function ShippingPrintSheet(props){
                             <b>Order Number</b>
                         </div>
                         <div>
-                            {packingSlips[slipIdx].orderNumber ? `SO#${packingSlips[slipIdx].orderNumber}`: null}
-                            {packingSlips[slipIdx].orderNumber && packingSlips[slipIdx].RMANumber ? "/" : null}
-                            {packingSlips[slipIdx].RMANumber ? `RMA#${packingSlips[slipIdx].RMANumber}` : null}
+                            {getOrderString(packingSlips[slipIdx].orderNumbers)}
+                            {renderRMAandSO(packingSlips[slipIdx].orderNumbers,packingSlips[slipIdx].RMANumbers)}
+                            {getRMAString(packingSlips[slipIdx].RMANumbers)}
                         </div>
                     </div>
                 </div>

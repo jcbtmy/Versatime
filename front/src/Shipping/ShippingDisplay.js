@@ -20,7 +20,7 @@ import {
     } from "../Common/Fields";
 
 import ShippingItems, {ItemDropTable} from "./ShippingItems";
-import ShippingServiceList, { map } from "./ShippingServices";
+import ShippingServiceList from "./ShippingServices";
 
 
 import Box from "@material-ui/core/Box";
@@ -258,7 +258,7 @@ export default class ShippingDisplay extends React.Component{
                 if(packingSlips.length){ 
                         //go find the order | rma to get items, shipment info etc,
 
-                        if(packingSlips[0].RMANumbers) //if rma then go grab the rma for it
+                        if(packingSlips[0].RMANumbers && packingSlips[0].RMANumbers.length) //if rma then go grab the rma for it
                         {
                             this.fetchRMAs(packingSlips[0].RMANumbers);
                         }
@@ -266,7 +266,7 @@ export default class ShippingDisplay extends React.Component{
                             this.setState({rmas: null});
                         }
 
-                        if(packingSlips[0].orderNumbers) //if orderr then go grab order for it
+                        if(packingSlips[0].orderNumbers && packingSlips[0].orderNumbers.length) //if orderr then go grab order for it
                         {
                             this.fetchOrders(packingSlips[0].orderNumbers);
                         }
@@ -320,7 +320,7 @@ export default class ShippingDisplay extends React.Component{
 
             URLSearchString += `orderNumbers[${index}]=${orderNum}`;
 
-            if(index != (orderNumbers.length - 1))
+            if(index !== (orderNumbers.length - 1))
                 URLSearchString += "&";
         });
 
@@ -354,7 +354,7 @@ export default class ShippingDisplay extends React.Component{
 
             URLSearchString += `RMANumbers[${index}]=${rmaNum}`;
 
-            if(index != (RMANumbers.length - 1))
+            if(index !== (RMANumbers.length - 1))
                 URLSearchString += "&";
         });
 
@@ -637,6 +637,7 @@ export default class ShippingDisplay extends React.Component{
     }
 
     change_customerPO = (event) => {
+
         this.setState((prevState) => {
             //change po for all slips
             const slips = prevState.packingSlips;
@@ -653,8 +654,6 @@ export default class ShippingDisplay extends React.Component{
     change_RMA = (event, rmas) => {
 
         const RMANumbers = (rmas) ? rmas.map(rma => rma.RMANumber) : null;
-
-        console.log(rmas);
 
         this.setState((prevState) => {
 
@@ -975,8 +974,8 @@ export default class ShippingDisplay extends React.Component{
                         orderDate={(orders) ? new Date(orders[0].orderDate) : new Date(rmas[0].RMADate)}
                         to={(orders) ? orders[0].to : rmas[0].to}
                         products={products}
-                        order={orders[0]}
-                        rma={rmas[0]}
+                        order={(orders) ? orders[0] : null}
+                        rma={(rmas) ? rmas[0] : null}
                     />
                 }
             </Display>       
