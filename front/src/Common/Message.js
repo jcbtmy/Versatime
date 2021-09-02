@@ -20,6 +20,7 @@ const useStyles = makeStyles(() => ({
         marginTop: 5,
         marginBotton: 20,
         alignItems: "center",
+        zIndex: 999,
     },
 
     success : {

@@ -4,21 +4,27 @@ import {Display, DisplayItem} from "../Common/Display";
 import HeadDisplay from "../Common/HeadDisplay";
 import {Message} from "../Common/Message";
 import {Recent, RecentItem} from "../Common/Recent";
+
+
 import {CollapseRow, GenTable, GenTableBody, GenTableHead} from "../Common/TemplateTable";
+
+
 import {
     IdentifierField,
     DateField,
     ToField,
     ShippingField,
     CustomerField,
+    NoteField,
 } from "../Common/Fields";
+
 import {SubmitButton} from "../Common/Buttons";
 
-
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import RMARepair from "./RMARepairs";
 import Button from '@material-ui/core/Button';
-import { Typography } from '@material-ui/core';
+import { IconButton, Typography } from '@material-ui/core';
 import RMAItem from "./RMAItem";
 
 
@@ -36,6 +42,8 @@ export default class RMADisplay extends React.Component{
             items: null,
             customer: null,
             RMANumber: null,
+            dateReceived: null,
+            additionalNotes: null,
 
 
             newRMA: false,
@@ -63,7 +71,7 @@ export default class RMADisplay extends React.Component{
 
     createRMA = () => {
         
-        const {RMANumber, customer, RMADate, items, shipTo, to} = this.state;
+        const {RMANumber, customer, RMADate, items, shipTo, to, dateReceived, additionalNotes} = this.state;
 
         if(RMANumber && customer && RMADate){ //check if needed fields are there
 
@@ -74,6 +82,8 @@ export default class RMADisplay extends React.Component{
                 RMADate: RMADate,
                 shipTo: shipTo,
                 to: to,
+                dateReceived: dateReceived,
+                additionalNotes: additionalNotes,
             };
 
             const headers = {
@@ -104,6 +114,8 @@ export default class RMADisplay extends React.Component{
                             RMADate: new Date(resRMA.RMADate),
                             to: resRMA.to,
                             shipTo: resRMA.shipTo,
+                            dateReceived: resRMA.dateReceived,
+                            additionalNotes: resRMA.additionalNotes,
                             newRMA: false,
                             change: false,
                         });
@@ -122,7 +134,7 @@ export default class RMADisplay extends React.Component{
 
     updateRMADetails = () => {
 
-        const {to, shipTo, customer, RMADate, RMANumber} = this.state;
+        const {to, shipTo, customer, RMADate, RMANumber, dateReceived, additionalNotes} = this.state;
 
         const headers = {
             method: "PUT",
@@ -132,6 +144,8 @@ export default class RMADisplay extends React.Component{
                 shipTo: shipTo,
                 customerId: customer._id,
                 RMADate: RMADate,
+                dateReceived: dateReceived,
+                additionalNotes: additionalNotes,
             })
         }
 
@@ -162,7 +176,7 @@ export default class RMADisplay extends React.Component{
             .then((rmas) => {
                 if(!rmas){return;}
 
-                this.setState({recentRMAs: rmas, 
+                this.setState({ recentRMAs: rmas, 
                                 RMANumber: null,
                                 items: null,
                                 newRMA: false,      
@@ -191,6 +205,8 @@ export default class RMADisplay extends React.Component{
                                 RMANumber: rma.RMANumber,
                                 customer: this.props.customers.find((customer) => customer._id === rma.customerId),
                                 RMADate: new Date(rma.RMADate),
+                                dateReceived: (rma.dateReceived) ? new Date(rma.dateReceived) : null,
+                                additionalNotes: rma.additionalNotes,
                                 to: rma.to,
                                 shipTo: rma.shipTo,
                                 items: rma.items,
@@ -211,7 +227,7 @@ export default class RMADisplay extends React.Component{
         }
     }
 
-    change_RMANumber = (event) => {
+    setRMANumber = (event) => {
 
         const num = parseInt(event.target.value)
         if(Number.isInteger(num)){
@@ -222,22 +238,29 @@ export default class RMADisplay extends React.Component{
         }
     }
     
-    change_RMATo = (event) => {
+    setRMATo = (event) => {
         this.setState({to: event.target.value, change: true});
     }
 
-    change_RMAShipTo = (event) => {
+    setRMAShipTo = (event) => {
         this.setState({shipTo: event.target.value, change: true});
     }
 
-    change_RMADate = (event) => {
+    setRMADate = (event) => {
         this.setState({RMADate: new Date(event.target.value), change: true})
     }
 
-    change_RMACustomer = (event, customer) => {
+    setDateReceived = (event) => {
+        this.setState({dateReceived: new Date(event.target.value), change: true});
+    }
+
+    setRMACustomer = (event, customer) => {
         this.setState({customer: customer, change: true});
     } 
 
+    setAddtionalNotes = (event) => {
+        this.setState({additionalNotes: event.target.value, change: true});
+    }
 
     addItem = (item) => {
 
@@ -246,6 +269,7 @@ export default class RMADisplay extends React.Component{
             tests: item.tests,
             serialNumber: item.serialNumber,
             issue: item.issue,
+            underWarranty: item.underWarranty
         }; //properly format 
 
         this.setState((prevState) => { //update state
@@ -262,6 +286,8 @@ export default class RMADisplay extends React.Component{
                         items: [],
                         rows: null,
                         customer: null,
+                        dateReceived: new Date(),
+                        additionalNotes: null,
                         to: null,
                         shipTo: null,
                         newRMA: true});
@@ -269,6 +295,21 @@ export default class RMADisplay extends React.Component{
 
     getOptionLabel = (option) => {
         return "" + option.RMANumber + " - " + option.customer.customerName; //render select options choices
+    }
+
+
+    removeItem = (index) => {
+
+        this.setState((prevState) => {
+
+            const newItems =  [...prevState.items];
+
+            newItems.splice(index, 1);
+
+            this.itemsToRows(newItems, prevState.RMANumber);
+
+            return {items : newItems};
+        } );
     }
 
     /*
@@ -283,9 +324,10 @@ export default class RMADisplay extends React.Component{
 
         const rows = [];
 
-        if(!items || !items.length)
+        if(!items)
         {
-            return;
+            this.setState({rows: rows})
+            return; 
         }
 
         for(let i = 0; i < items.length; i++)
@@ -329,7 +371,20 @@ export default class RMADisplay extends React.Component{
                             product.productId, 
                             (serial) ? serial.mesh : "", 
                             items[i].issue,
+                            (items[i].underWarranty) ? "yes" : "no",
                         ];
+
+            if(this.state.newRMA){
+                cols.push(
+                    <IconButton
+                        onClick={(e) => this.removeItem(i)}
+                    >
+                        <DeleteIcon 
+                            color="secondary" 
+                        />
+                    </IconButton>     
+                );
+            }
 
             rows.push(
                 <CollapseRow 
@@ -355,6 +410,8 @@ export default class RMADisplay extends React.Component{
                 message,
                 items,
                 rows,
+                dateReceived,
+                additionalNotes,
 
         }= this.state;
 
@@ -389,7 +446,7 @@ export default class RMADisplay extends React.Component{
                                                 {[
                                                     "RMANumber " + item.RMANumber, 
                                                     customer.customerName, 
-                                                    "" + date.getMonth() + "/" + date.getDay() + "/"+ date.getFullYear(),
+                                                    "" + date.getMonth() + 1 + "/" + date.getDay() + "/"+ date.getFullYear(),
                                                 ]}
                                             </RecentItem>
                                         </Button>
@@ -412,30 +469,40 @@ export default class RMADisplay extends React.Component{
                             <IdentifierField
                                     label="RMA Number"
                                     value={RMANumber}
-                                    onChange={this.change_RMANumber}
+                                    onChange={this.setRMANumber}
                                     allowEdit={newRMA}
                             />
                             <CustomerField
                                     customers={customers}
                                     value={customer}
-                                    onChange={this.change_RMACustomer}
+                                    onChange={this.setRMACustomer}
                             />
                             <DateField 
                                 label="Date Created" 
                                 value={RMADate} 
-                                onChange={this.change_RMADate}
+                                onChange={this.setRMADate}
                             />
                             <ToField 
                                 value={to} 
-                                onChange={this.change_RMATo}
+                                onChange={this.setRMATo}
                             />
                             <ShippingField 
                                 value={shipTo} 
-                                onChange={this.change_RMAShipTo}
-                            />     
+                                onChange={this.setRMAShipTo}
+                            />
+                            <DateField 
+                                label="Date Received"
+                                value={dateReceived}
+                                onChange={this.setDateReceived}
+                            />
+                            <NoteField 
+                                label="Additional Notes"
+                                value={additionalNotes}
+                                onChange={this.setAddtionalNotes}
+                            />
                         </HeadDisplay>
                     </DisplayItem>
-                }   
+                }
                 {
                     newRMA && 
                     <DisplayItem> 
@@ -457,7 +524,9 @@ export default class RMADisplay extends React.Component{
                                 <b>Product Id</b>
                                 <b>Mesh</b>
                                 <b>Issue</b>
+                                <b>Under Warranty</b>
                                 <b></b>
+                                {newRMA && <b></b>}
                             </GenTableHead>
                             <GenTableBody>
                                 {rows}
