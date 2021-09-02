@@ -26,6 +26,7 @@ import RMARepair from "./RMARepairs";
 import Button from '@material-ui/core/Button';
 import { IconButton, Typography } from '@material-ui/core';
 import RMAItem from "./RMAItem";
+import dateString  from '../Common/DateString';
 
 
 
@@ -446,7 +447,7 @@ export default class RMADisplay extends React.Component{
                                                 {[
                                                     "RMANumber " + item.RMANumber, 
                                                     customer.customerName, 
-                                                    "" + date.getMonth() + 1 + "/" + date.getDay() + "/"+ date.getFullYear(),
+                                                    dateString(date),
                                                 ]}
                                             </RecentItem>
                                         </Button>

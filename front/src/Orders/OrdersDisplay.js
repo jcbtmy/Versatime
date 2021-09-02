@@ -15,6 +15,7 @@ import {
   ShippingField,
   ToField,
   } from "../Common/Fields";
+import dateString from "../Common/DateString";
 
 import {serialXML, getDymoLabel, getDymoPrinter} from "../Serials/SerialDymoXML";
 import Typography from "@material-ui/core/Typography";
@@ -632,7 +633,7 @@ export default class Orders extends React.Component {
                                     <RecentItem>
                                                 {[  "Order: " + item.orderNumber, 
                                                   customer.customerName, 
-                                                  "" + date.getMonth() + "/" + date.getDay() + "/"+ date.getFullYear(),
+                                                  dateString(date),
                                                 ]}
                                     </RecentItem>
                                 </Button>

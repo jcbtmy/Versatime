@@ -22,17 +22,8 @@ import {GenTable, GenTableBody, GenTableHead, Row} from "../Common/TemplateTable
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+import dateString from "../Common/DateString";
 import {serialXML, serialMeshXML, serialBluetoothMeshXML,getDymoLabel, getDymoPrinter} from "./SerialDymoXML";
-
-
-
-const dateString = (date) => {
-    let month = '' + (date.getMonth() + 1);
-    let day = '' + date.getDate();
-    let year = date.getFullYear();
-
-    return month + "-" + day + "-" + year;
-}
 
 export default class SerialDisplay extends React.Component{
 

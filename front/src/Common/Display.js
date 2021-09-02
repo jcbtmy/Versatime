@@ -34,7 +34,7 @@ const useStyles = makeStyles(() => ({
         flexGrow: 1,
         backgroundColor: "white",
         position: "absolute",
-        maxWidth: 900,
+        maxWidth: "65vw",
         zIndex: 0,
         padding: "30px 50px 30px 50px",
         marginRight: "auto",
