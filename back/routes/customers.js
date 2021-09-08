@@ -56,8 +56,32 @@ router.post("/create", inputCheck, async(req, res) => {
 });
 
 
-router.delete("/:customerId", auth, async(req,res) => {
+router.put("/:_id", async(req, res) => {
 
+    const customer = await Customer.findOne(req.params).catch(err => null);
+
+    if(!customer)
+    {
+        return res.status(404).json({
+            message: "Could not find customer",
+        });
+    }
+
+    customer.customerName = req.body.customerName;
+
+    await customer.save()
+            .then(doc => res.status(200).send(doc))
+            .catch(error => res.status(400).json({
+                message: error.message,
+            }));
+
+});
+
+
+router.delete("/:customerId", async(req,res) => {
+
+
+/*
     if(!req.session.userID)
     {
         return res.status(400).json({
@@ -90,6 +114,7 @@ router.delete("/:customerId", auth, async(req,res) => {
             message: "Must have no serial numbers associated in order to delete customer",
         });
     }
+*/
 
 
     await Customer.deleteOne({_id: req.params.customerId})
