@@ -31,7 +31,7 @@ const useStyles = makeStyles(() => ({
         flexFlow: "wrap",
         position: "relative",
         alignItems: "center",
-        maxWidth: 800,
+        maxWidth: "55vw",
 
     },
     item : {
