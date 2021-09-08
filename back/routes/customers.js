@@ -2,6 +2,7 @@ const express = require("express");
 const auth = require("../middleware/Auth");
 const { check, validationResult} = require("express-validator");
 const Customer = require("../models/Customers");
+const Serial = require("../models/Serial");
 
 
 const router = express.Router();
@@ -51,6 +52,55 @@ router.post("/create", inputCheck, async(req, res) => {
     });
 
     return res.status(200).json({id, customerName});
+
+});
+
+
+router.delete("/:customerId", auth, async(req,res) => {
+
+    if(!req.session.userID)
+    {
+        return res.status(400).json({
+            message: "No Session",
+        })
+    }
+
+    const user = await User.findOne({_id: req.session.userID}, {});
+
+
+    if(user.role)
+    {
+        return res.status(400).json({
+            message: "Only admin allowed to delete user",
+        });
+    }
+    
+    const serials = await Serial.find({customerId: req.params.customerId}).catch(err => null);
+
+    if(!serials)
+    {
+        return res.status(400).json({
+            message: "Error searching for serials",
+        });
+    }
+
+    if( serials && serials.length)
+    {
+        return res.status(400).json({
+            message: "Must have no serial numbers associated in order to delete customer",
+        });
+    }
+
+
+    await Customer.deleteOne({_id: req.params.customerId})
+            .then((doc) => res.status(200).json({
+                message: "sucessfully deleted",
+            }))
+            .catch((err) => {
+                res.status(400).json({
+                    message: err.message,
+                });
+            });
 
 });
 

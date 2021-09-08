@@ -82,6 +82,29 @@ export default class CustomerDisplay extends React.Component{
         
     }
 
+    deleteCustomer = () => {
+
+        const url = "/api/customers/" + this.state.customer._id;
+        const header = {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(url)
+            .then((res) => {
+                if(res.ok) 
+                {
+                    return this.setState({
+                        message: {error: false, text: "Successfully deleted"}, 
+                        customer: null, 
+                        customerSerials: null
+                    });
+                }
+                res.json().then(err => this.setState({message: { error: true, text: err.message}}));
+            })
+            .catch(err => this.setState({message: {error: true, text: err.message}}));
+    }
+
     setCustomer = (option, customer) => {
         this.setState({customer: customer});
         
@@ -190,6 +213,11 @@ export default class CustomerDisplay extends React.Component{
                                 </GenTableBody>
                             </GenTable>
 
+                    }
+
+                    {
+                        customer && !newCustomer && customerSerials && !customerSerials.length && this.props.user.role === 0 &&
+                        <Button color="secondary" variant="contained" style={{width: "auto", marginRight: "auto"}}>Delete Customer</Button>
                     }
 
             </Display>

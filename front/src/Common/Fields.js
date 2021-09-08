@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
         "& .Mui-disabled": {
             color: "black",
         },
-        minWidth: 275,
+        minWidth: "25vw",
        
     },
     identifierRoot:{
@@ -30,13 +30,13 @@ const useStyles = makeStyles(() => ({
         "& .Mui-disabled": {
             color: "black",
         },
-        width: 275,
+        width: "25vw",
     },
     fullWidth : {
         flexGrow: 0,
     },
     noteWidth : {
-        width: 275,
+        width: "25vw",
         height: "100%",
     },
     labelIdRoot: {

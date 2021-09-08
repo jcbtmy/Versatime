@@ -265,6 +265,7 @@ export default class VersaApp extends React.Component {
                               render={(props) => <CustomerDisplay {...props}
                                                                   products={products}
                                                                   customers={customers}
+                                                                  user={user}
                                                                   onUpdate={this.updateCustomers}
                                                   />
                               }
