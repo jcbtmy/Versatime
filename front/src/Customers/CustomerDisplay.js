@@ -85,12 +85,12 @@ export default class CustomerDisplay extends React.Component{
     deleteCustomer = () => {
 
         const url = "/api/customers/" + this.state.customer._id;
-        const header = {
+        const headers = {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
         };
 
-        fetch(url)
+        fetch(url, headers)
             .then((res) => {
                 if(res.ok) 
                 {
