@@ -80,8 +80,6 @@ router.put("/:_id", async(req, res) => {
 
 router.delete("/:customerId", async(req,res) => {
 
-
-/*
     if(!req.session.userID)
     {
         return res.status(400).json({
@@ -114,7 +112,6 @@ router.delete("/:customerId", async(req,res) => {
             message: "Must have no serial numbers associated in order to delete customer",
         });
     }
-*/
 
 
     await Customer.deleteOne({_id: req.params.customerId})
