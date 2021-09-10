@@ -31,6 +31,7 @@ import NewItem from "./NewItem";
 
 
 
+
 export default class Orders extends React.Component {
 
       constructor(props)
@@ -103,7 +104,8 @@ export default class Orders extends React.Component {
       }
 
       getOrder = async(orderNumber) => {
-
+        
+        window.history.replaceState(null, "Versatime", "/SalesOrders/" + orderNumber)
 
         fetch("/api/orders/" + orderNumber)
             .then((res) => {
@@ -112,7 +114,6 @@ export default class Orders extends React.Component {
                 {
                   return res.json();
                 }  
-
                 res.json().then((err) => this.setState({message: { 
                       error: true,
                       text: err.message
@@ -121,7 +122,7 @@ export default class Orders extends React.Component {
             })
             .then(order => {
 
-                    if(!order) {return;}
+                    if(!order ) {return;}
 
                     const customer = this.props.customers.find(customer => customer._id === order.customerId);//find customer from id
 
@@ -141,13 +142,20 @@ export default class Orders extends React.Component {
 
                     this.props.location.pathname += `/${order.orderNumber}`;
             })
-            .catch(err => this.setState({message: {error: true, text: err.toString()}}));
+            .catch(err => this.setState({message: {error: true, text: err.message}}));
 
       }
 
       componentDidMount(){
 
         const  state = this.props.location.state;
+        const  locationArr = window.location.pathname.split('/');
+        
+        if(locationArr.length === 3 && locationArr[2] !== '')
+        {
+            this.getOrder(locationArr[2]);
+            return;
+        }
 
         if(!state) //did the router render component with a state?
         {

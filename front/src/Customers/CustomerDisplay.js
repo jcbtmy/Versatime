@@ -26,6 +26,19 @@ export default class CustomerDisplay extends React.Component{
         };
     }
 
+    componentDidMount()
+    {
+        const  locationArr = window.location.pathname.split('/');
+        
+        if(locationArr.length === 3 && locationArr[2] !== '')
+        {
+            const customer = this.props.customers.find((c) => c._id === locationArr[2]);
+            this.setState({customer: customer})
+            this.fetchCustomerSerials(locationArr[2]);
+            return;
+        }
+    }
+
     getOptionLabel = (option) => {
         return option.customerName;
     }
@@ -39,7 +52,41 @@ export default class CustomerDisplay extends React.Component{
         }));
     }
 
+    updateCustomer = () => {
+
+        const headers = {
+            method: "PUT",
+            headers : {"Content-Type" : "application/json"},
+            body : JSON.stringify({customerName: this.state.customer.customerName}),
+        };
+
+
+        fetch("/api/customers/" + this.state.customer._id, headers)
+        .then((res) => {
+            if(res.ok)
+            {
+                return res.json();
+            }
+            res.json().then((err) => this.setState({message: {error: true, text: err.message}}));
+        })
+        .then((customerUpdated) => {
+
+            if(!customerUpdated)
+                return;
+                
+            this.setState((prevState) => ({
+                customer: {
+                    ...prevState.customer,
+                    customerName: customerUpdated.customerName,
+                }
+            }));
+        })
+        .catch((err) => this.setState({message: {error: true, text: err.message}}))
+    }
+
     fetchCustomerSerials = (customerId) => {
+
+        window.history.replaceState(null, "Versatime", "/Customers/" + customerId)
 
         fetch("/api/serials/customerId/" + customerId)
             .then((res) => {
@@ -106,6 +153,7 @@ export default class CustomerDisplay extends React.Component{
     }
 
     setCustomer = (option, customer) => {
+
         this.setState({customer: customer});
         
         if(customer)
@@ -175,7 +223,7 @@ export default class CustomerDisplay extends React.Component{
                         newCustomer && <Title variant="h5">New Customer</Title>
                     }
                     {
-                        message && <Message error={message.error} clear={() => this.setState({message: null})}/>
+                        message && <Message error={message.error} text={message.text} clear={() => this.setState({message: null})}/>
                     }
                     {
                         customer && 

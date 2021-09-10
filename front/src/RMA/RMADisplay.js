@@ -58,7 +58,15 @@ export default class RMADisplay extends React.Component{
     }
 
     componentDidMount(){
+
         const  state = this.props.location.state;
+        const  locationArr = window.location.pathname.split('/');
+        
+        if(locationArr.length === 3 && locationArr[2] !== '')
+        {
+            this.fetchRMA(locationArr[2]);
+            return;
+        }
 
         if(!state) //did the router render component with a state?
         {
@@ -164,6 +172,7 @@ export default class RMADisplay extends React.Component{
     }
 
     fetchRecent = () => {
+        
         fetch("/api/rmas/recent/10")
             .then((res) => {
                 if(res.ok)
@@ -187,6 +196,9 @@ export default class RMADisplay extends React.Component{
     }
 
     fetchRMA = (RMANumber) => {
+
+        window.history.replaceState(null, "Versatime", "/RMAs/" + RMANumber)
+
         fetch("/api/rmas/" + RMANumber)
             .then((res) => {
                 if(res.ok)

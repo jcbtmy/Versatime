@@ -43,6 +43,13 @@ export default class SerialDisplay extends React.Component{
     componentDidMount(){
         
         const  state = this.props.location.state;
+        const  locationArr = window.location.pathname.split('/');
+        
+        if(locationArr.length === 3 && locationArr[2] !== '')
+        {
+            this.fetchSerial(locationArr[2]);
+            return;
+        }
 
         if(!state) //did the router render component with a state?
         {
@@ -227,6 +234,8 @@ export default class SerialDisplay extends React.Component{
     }
 
     fetchSerial = async(serialNumber) => {
+
+        window.history.replaceState(null, "Versatime", "/SerialNumbers/" + serialNumber);
 
         fetch("/api/serials/" + serialNumber)
             .then((res) => {    

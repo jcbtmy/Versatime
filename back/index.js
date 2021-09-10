@@ -25,7 +25,9 @@ dotenv.config({path: __dirname + '/.env'});
 
 const port = process.env.PORT || 80;
 
-const static_path = ( process.env.DEV === '1') ?  "../front/public/build/" : "./public/build/";
+const static_path = ( process.env.DEV === '1') ?  "../front/build/" : "./public/build/";
+
+console.log
 
 const db_host = (process.env.DEV === '1') ? "localhost" : "mongo";
 
@@ -51,6 +53,48 @@ app.use("/api/orders", orders);
 app.use("/api/serials", serials);
 app.use("/api/rmas", rmas);
 app.use("/api/packingSlips", packingSlips);
+
+
+//Handles all of the frontend routing requests
+
+app.get("/SalesOrders", async(req, res) => {
+    res.sendFile("index.html", {root: static_path});
+})
+
+app.get("/SalesOrders/:orderNumber", async(req, res) => {
+    res.sendFile("index.html", {root: static_path});
+});
+
+app.get("/RMAs", async(req, res) => {
+    res.sendFile("index.html", {root: static_path});
+})
+
+app.get("/RMAs/:RMANumber", async(req, res) => {
+    res.sendFile("index.html", {root: static_path});
+});
+
+app.get("/Shipping", async(req, res) => {
+    res.sendFile("index.html", {root: static_path});
+});
+
+app.get("/SerialNumbers", async(req, res) => {
+    res.sendFile("index.html", {root: static_path});
+});
+
+app.get("/SerialNumbers/:serialNumber", async(req, res) => {
+    res.sendFile("index.html", {root: static_path});
+}); 
+
+app.get("/Customers", async(req, res) => {
+    res.sendFile("index.html", {root: static_path});
+}); 
+
+app.get("/Customers/:_id", async(req, res) => {
+    res.sendFile("index.html", {root: static_path});
+}); 
+
+
+
 app.use(express.static(static_path));
 
 app.listen(port, (req, res) => {
