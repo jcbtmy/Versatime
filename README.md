@@ -3,7 +3,7 @@
 
 ## Introduction
 
-This app was written as an internal piece of software written to handle all functions associated with VersaCall's serial numbers. This includes creaton upon initial sales orders, return merchandising, testing, and shipping. This application was written following RESTful architechture.
+This app was written as an internal piece of software to handle all functions associated with VersaCall's serial numbers. This includes creaton upon initial sales orders, return merchandising, testing, and shipping. This application was written following RESTful architechture.
 
 ## Requirements
 
